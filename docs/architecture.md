@@ -1,10 +1,11 @@
 # Architecture
 
-The Clean Reactive Architecture is based on the 
+The *Clean Reactive Architecture* is based on the 
 [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
-concept. The architecture can be outlined with the following UML diagram:
+concept, preserving its harmony. The architecture can be outlined with the
+following UML diagram:
 
-<uml-image/>
+![clean-reactive-architecture](images/clean-reactive-architecture.drawio.svg)
 
 ### Definition of units
 
@@ -24,17 +25,16 @@ concept. The architecture can be outlined with the following UML diagram:
   data prepared by the presenter, and captures user input and transfers it to
   the controller.
 - **External system or resource**: A unit that represents external systems or
-  services the application interacts with, databases, storage, or other
-  applications or libraries with an API.
+  resources the application interacts with, e.g services, databases, storage,
+  or other applications and libraries with an API.
 
 ### Definition of concepts utilized by the units
 
 - **Enterprise Business Entity**: An entity that encapsulates enterprise
   business rules and data.
-- **Enterprise Business Rules and Data**: The most general and high-level
-  rules and data that would exist even if the application didn't. These are
-  enterprise-wide rules that rarely change and are independent of any specific
-  application.
+- **Enterprise Business Rules and Data**: Rules and data that would exist even
+  if the application didn't exist. These enterprise-wide rules are independent of
+  any specific application.
 - **Application Business Entity**: An entity that encapsulates
   application-specific business rules and data.
 - **Application Business Rules and Data**: Rules and data specific to the
@@ -44,3 +44,7 @@ concept. The architecture can be outlined with the following UML diagram:
   represented as an object structure.
 - **Valid State**: One of a finite number of states considered valid according
   to the enterprise and application business rules.
+
+The *double lines* on the diagram represent boundaries, which data crosses as
+primitive data types or data structures, for example DTOs or plain objects.
+
