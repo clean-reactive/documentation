@@ -1,10 +1,10 @@
 # Architecture
 
-The *Clean Reactive Architecture* is based on the 
+Clean Reactive Architecture is based on the 
 [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 concept. The following UML diagram outlines it:
 
-![clean-reactive-architecture](images/clean-reactive-architecture.drawio.svg)
+![clean-reactive-architecture](images/clean-reactive-architecture.svg)
 
 ### Definition of units
 
@@ -47,14 +47,17 @@ concept. The following UML diagram outlines it:
 The *double lines* on the diagram represent boundaries, which data crosses as
 primitive data types or data structures, for example DTOs or plain objects.
 
+For everything not specified below engineers and developers should rely on the
+[Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+concept.
 
 <details>
   <summary><b>Where did the diagram come from?</b></summary>
 
-The Clean Architecture is a formalized architectural concept for application
-software. The most overlooked factor here is that the implementation of the
-Clean Architecture is a UML diagram. The concept itself is too abstract,
-while the codebase is too concrete. And a UML diagram bridges that.
+Clean Architecture is a formalized architectural concept for application
+software. The most overlooked factor here is that the implementation of Clean
+Architecture is a UML diagram. The concept itself is too abstract, while the
+codebase is too concrete. And a UML diagram bridges that.
 
 ![clean-architecture-implementation-flow](images/ca-implementation-flow.png)
 
@@ -79,11 +82,11 @@ constructed as follows:
 <details>
   <summary><b>Where does the application business entity come from?</b></summary>
 
-Classical Clean Architecture distinguishes between *enterprise business rules
-and data* and *application business rules*. Enterprise rules and data are
-independent of any particular application and live inside *entities*.
-Application rules are specific to a particular application's behavior and live
-inside *use cases* and apply as orchestration logic during the use case call.
+Clean Architecture distinguishes between *enterprise business rules and data*
+and *application business rules*. Enterprise rules and data are independent of
+any particular application and live inside *entities*.  Application rules are
+specific to a particular application's behavior and live inside *use cases*
+and apply as orchestration logic during the use case call.
 
 However, reactive client applications introduce a category of
 **application-specific concern** that requires an extension of this model:
@@ -125,25 +128,24 @@ application-specific.
   <summary><b>Does it support unidirectional flow?</b></summary>
 
 Clean Reactive Architecture supports unidirectional flow out of the box, and
-holds it more strictly than in architectures with stateful hubs. 
+holds it more strictly than in architectures with stateful hubs. The flow
+never crosses and reverses.
 
 Unidirectional flow of control and data is the following:
 
 ![clean-reactive-acrhitecture-flow-of-control](images/clean-reactive-architecture-flow-of-control.png)
 
-The controller receives user input, the presenter reacts and projects entities
-for the user interface. They both are never connected to each other - they
-share only the entities, where one path writes and the other reads. There is
-no single unit (hub) which sits on both paths. The flow never crosses and
-reverses.
+The `controller` receives user input, the `presenter` reacts and projects
+`entities` for the `user interface`. They both are never connected to each
+other - they share only the `entities`, where one path writes and the other
+reads. There is no single unit (hub) which sits on both paths. 
 
 </details>
 
 <details>
   <summary><b>Are the SOLID principles followed?</b></summary>
 
-Clean Reactive Architecture follows the SOLID principles. The SOLID principles
-are practical here.
+Clean Reactive Architecture follows the SOLID principles.
 
 1. *The single-responsibility principle (SRP)*. Each unit of the
    architecture has its own and only one well-defined responsibility.
@@ -181,20 +183,136 @@ are practical here.
 
 <details>
   <summary><b>How does it scale?</b></summary>
+
+As the codebase grows, it will obviously need more units to share common
+logic. Following the Clean Architecture concept, the UML diagram can be
+extended with additional units, which will fit an additional circle (layer) in
+the circular diagram of the concept. Such extension is consistent.
+
+The extended diagram is the following:
+
+![clean-reactive-architecture-extended](images/clean-reactive-architecture-extended.svg)
+
+The diagram represents units which are empirically sufficient for a quite
+large codebase.
+
+### Definition of additional units
+
+- **Selector**: Unit that derives values or aggregates data structures from
+  the entities without modifying them.
+- **Transaction**: Unit that transitions entities between two valid states,
+  ensuring business rules are maintained.
+- **Effect**: Unit that manages data flows to, from, and across gateways
+  (sequential, parallel, etc.) and derives data structures from them.
+
 </details>
 
 <details>
-  <summary><b>How to share business logic?</b></summary>
+  <summary><b>How does it share business logic?</b></summary>
+
+Enterprise business rules and data are explicit in Clean Reactive
+Architecture, so they can be extracted into a separate core (library) to be
+shared across multiple reactive and non-reactive clients.
+
+Such a core (library) will know nothing about any client. It will have its own
+API and, for example, its own mechanism for storing data. The most practial
+thing here is that the core (library) can be built following the same Clean
+Architecture concept but outlined with the classical, non-reactive UML diagram
+\- so one concept covers two different types of applications.
+
+High level architecture:
+
+![shared-core-library](images/shared-core-library.png)
+
+Architecture of the reactive client: 
+
+![clean-reactive-architecture](images/clean-reactive-architecture.png)
+
+Architecture of the core (library):
+
+![clean-reactive-architecture](images/ca-non-reactive.png)
+
+In fact, the core (library) implementation can follow any other architectural
+concept — hexagonal, DDD, or none at all. It can even be developed in parallel
+with a reactive client - the client's gateway will connect the two parts
+later.
+
 </details>
 
 <details>
-  <summary><b>What happened to the ViewModel?</b></summary>
+  <summary><b>Does it have a ViewModel?</b></summary>
+
+Clean Reactive Architecture has a ViewModel, though it is not outlined in the
+diagram for reasons of simplicity. Here "ViewModel" means what it originally
+meant - the data structure the `presenter` returns and the `user interface`
+consumes.
+
+![clean-reactive-architecture-view-model](images/clean-reactive-architecture-view-model.png)
+
+The ViewModel is just a value: comparable, snapshotable, safe to pass around,
+trivial to construct for a preview or a test. It has no behavior, no
+lifecycle, no identity.
+
+It is important to note that every property of a presenter returns its own
+ViewModel. Let's look at an example:
+
+```ts
+interface BooksByAuthor {
+   authorName: string;
+   bookTitle: string;
+}
+
+interface UserBooksPresenter {
+   userName: string;
+   books: BooksByAuthor[];
+}
+```
+
+Here `userName` and `books` are properties of the `UserBooksPresenter`
+interface, each property return own ViewModel - `userName` a primitive value,
+`books` a structured one. 
+
 </details>
 
 <details>
-  <summary><b>Where does the repository fit?</b></summary>
+  <summary><b>Does it have a repository?</b></summary>
+
+Clean Reactive Architecture has a repository, but the diagram does not have
+a separate unit for it. The repository is a composite of the `gateway` and
+`entities` units that appears in code - a single implementation that satisfies
+`gateway<I>` and holds the entities it serves.
+
+![clean-reactive-architecture-repository](images/clean-reactive-architecture-repository.png)
+
+Some implementations let the repository absorb the `gateway<I>` interface -
+which is acceptable, except the case where the repository defines the contract
+rather than consume it. This is not desired, and the development methodology
+prevents it.
+
+![clean-reactive-architecture-repository-with-gateway-interface.png](images/clean-reactive-architecture-repository-with-gateway-interface.png)
+
+
 </details>
 
 <details>
   <summary><b>How does it map to the testing pyramid?</b></summary>
+
+Clear Reactive Architecture maps cleanly onto the testing pyramid. 
+
+![testing-pyramid](images/testing-pyramid.png)
+
+Each level corresponds to a level of unit composition:
+
+- *Unit tests* test individual architectural units in isolation - a presenter,
+  a use case, a gateway implementation.
+- *Integration tests* test architectural units working together - a controller
+  through its use case to a gateway, or a gateway integration with an external
+  resource.
+- *End-to-end tests* test the full path through the architectural units, from
+  the `user interface` unit to the `external resource` unit.
+
+Because the units and their boundaries are explicit, each test level has a
+clear target: the pyramid's layers are the architecture's layers of
+composition.
+
 </details>
