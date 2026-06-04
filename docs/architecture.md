@@ -1,8 +1,11 @@
 # Architecture
 
-Clean Reactive Architecture is based on the 
-[Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
-concept. The following UML diagram outlines it:
+Clean Reactive Architecture is based on the [Clean Architecture
+concept](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html).
+For everything not specified below engineers and developers should rely on the
+concept.
+
+Clean Reactive Architecture is outlined with the following UML diagram:
 
 ![clean-reactive-architecture](images/clean-reactive-architecture.svg)
 
@@ -46,10 +49,6 @@ concept. The following UML diagram outlines it:
 
 The *double lines* on the diagram represent boundaries, which data crosses as
 primitive data types or data structures, for example DTOs or plain objects.
-
-For everything not specified below engineers and developers should rely on the
-[Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
-concept.
 
 <details>
   <summary><b>Where did the diagram come from?</b></summary>
