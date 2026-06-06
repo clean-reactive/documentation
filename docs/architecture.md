@@ -1,6 +1,6 @@
 # Architecture
 
-Clean Reactive Architecture is based on the [Clean Architecture
+Clean Reactive Architecture is an implementation of the [Clean Architecture
 concept](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html).
 For everything not specified below engineers and developers should rely on the
 concept.
@@ -85,7 +85,13 @@ Clean Architecture concept is universal and an implementation tailored for a
 reactive application, for example with external API integration, is
 constructed as follows:
 
-![clean-architecture-to-clean-reactive-acrhitecture](images/ca-to-clean-reactive-architecture.png)
+![clean-architecture-to-clean-reactive-architecture](images/ca-to-clean-reactive-architecture.png)
+
+> NOTE: The diagram shows units (conceptual responsibilities), not files or
+> folder structure. Units are how the system should be thought about at
+> runtime - which unit owns what, dependencies, where responsibilities lie.
+> How units are organized into files is a separate organizational decision,
+> independent of the architecture. 
 
 </details>
 
@@ -122,6 +128,7 @@ Reactive client applications deal with this type of state constantly, though
 it rarely receives architectural recognition. Examples:
 
 - *Operation state* — `idle` / `loading` / `error`, per operation.
+- *Initialization state* — `uninitialized` / `initializing` / `ready`.
 - *Session state* — `authenticated` / `refreshing` / `expired`.
 - *Route state* — current route, parameters, back stack.
 - *Form state* — field values, dirty flags, validation status, submission
@@ -143,7 +150,7 @@ never crosses and reverses.
 
 Unidirectional flow of control and data is the following:
 
-![clean-reactive-acrhitecture-flow-of-control](images/clean-reactive-architecture-flow-of-control.png)
+![clean-reactive-architecture-flow-of-control](images/clean-reactive-architecture-flow-of-control.png)
 
 The `controller` receives user input, the `presenter` reacts and projects
 `entities` for the `user interface`. They both are never connected to each
@@ -305,18 +312,18 @@ prevents it.
 </details>
 
 <details>
-  <summary><b>Is the user interface special?</b></summary>
+  <summary><b>Where does an alternative driver fit?</b></summary>
 
 The `user interface` is not a privileged unit, it is a detail. Clean Reactive
-Architecture treats the user interface as one driver among several.  
+Architecture treats the `user interface` as one driver among several.  
 
 A **driver** exercises the core: it provides input through controllers and
-observes the core changes. Each driver provides its _own controllers and
-presenters implementations_, which are  _not shared across drivers_. What is
-shared is the core: `use case`, `entities` and `gateway<I>` that every
-driver's controllers and presenters meet. 
+observes the core's changes through presenters. Normally each driver has its
+_own controller and presenter implementations_, which are specific to a
+particular driver. What is shared is the core: `use case`, `entities` and
+`gateway<I>` that every driver's controllers and presenters meet. 
 
-![clean-reactive-architecture-user-interface-driver](images/clean-reactive-architecture-user-interface-driver.png)
+![clean-reactive-architecture-driver-user-interface](images/clean-reactive-architecture-driver-user-interface.png)
 
 Common drivers:
 
@@ -334,7 +341,41 @@ connection is therefore _both_ a driver (inbound) and an external resource
 does not care) that the input arriving through its controller and the output
 leaving through its gateway belong to the same socket.
 
-![clean-reactive-architecture-web-socket-driver](images/clean-reactive-architecture-web-socket-driver.png)
+![clean-reactive-architecture-driver-web-socket](images/clean-reactive-architecture-driver-web-socket.png)
+
+</details>
+
+<details>
+  <summary><b>Where does a Backend for Frontend fit?</b></summary>
+
+A gateway adapts a general-purpose external API into the shape a client
+actually needs - mapping responses, combining several calls, reshaping data to
+match the entities the application works with. The more a general-purpose API
+differs from what the client needs, the more adaptation accumulates in the
+gateways.
+
+![clean-reactive-architecture-without-bff](images/clean-reactive-architecture-without-bff.png)
+
+That accumulated adaptation is the signal for a Backend for Frontend (BFF). A
+BFF is a server-side layer built for one specific client, it performs the
+mapping and aggregation the client would otherwise do itself. In these terms,
+the BFF is the difference between the gateway and the general-purpose API -
+the adaptation moved to the server, where it can be done once and closer to
+the data.
+
+![clean-reactive-architecture-with-bff](images/clean-reactive-architecture-with-bff.png)
+
+The architecture makes this visible. Because adaptation is localized in
+gateways rather than distributed across the codebase, heavy mappers and
+aggregations in the gateways are a concrete indication that the work belongs
+server-side. When a BFF takes over that adaptation, the client's gateways
+become thin - the BFF returns data already shaped for the client.  As the
+client's needs evolve, the gateways begin accumulating adaptations again,
+signalling the next round of BFF update.
+
+See also: 
+
+S. Newman. [Pattern: Backends For Frontends](https://samnewman.io/patterns/architectural/bff/)
 
 </details>
 

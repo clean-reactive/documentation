@@ -1,49 +1,44 @@
 # Development Methodology
 
-Developers and teams may apply any preferred methodology. However, two
-practices particularly complement this architecture.
+Developers and teams may apply any preferred practices and conventions.
+However the following should be considered. 
 
-## Continuous refactoring
+## Complementary practices
 
-With the architecture concept and the UML diagram, developers have a blueprint
-of how the system should be structured. But in practice there are several
-common pitfalls: premature abstractions and the introduction of separate files
-per unit upfront.
+The practices lean on the architecture's UML diagram and its layer boundaries
+to guide day-to-day work.
 
-Instead, any related logic may remain inlined to keep the codebase simple at
-first. The units may be extracted later as needed (e.g. to be reused, to be
-tested, too big, etc.) - the UML diagram helps.
+### Continuous refactoring
 
-The process of continuous refactoring is formalized by B. Meyer and is called
-*the cluster model of software development*. In short, each feature/module
-(cluster) goes through four mandatory steps:
+The practice defines a process for the continuous evolution of the codebase.
+The process is formalized by B. Meyer and is called *The cluster model of
+software development*. In short, each unit, feature and application goes
+through four mandatory steps:
 
- ```console
- 1. Specification -> 2. Design / Implementation -> 3. Validation -> 4. Generalization
- ```
+![cluster-model-of-software-development](images/model-of-software-development.png)
 
 Generalization is the effort of transforming program elements into reusable
 software components.
 
-> Developers should keep in mind that, even though the process is formalized,
-> generalization is not completely mechanical. The decision to create a
-> commonality should be driven by the broader context, including the
+> NOTE: developers should keep in mind that, even though the process is
+> formalized, generalization is not completely mechanical. The decision to
+> create a commonality should be driven by the broader context, including the
 > application's evolution and business roadmap.
 
-### Practical aspects
+#### Practical aspects
 
- - Any feature can be done quickly from scratch, or by copy/pasting bits and
-   units from other features with later generalization of commonalities.
- - Any application starts from one component/file and *formally* evolves into
-   a fully decomposed, structured codebase.
+With the UML diagram, developers have a blueprint of how the system should be
+structured. But in practice there are several common pitfalls: premature
+abstractions and the introduction of separate files per unit upfront.
 
-See also:
+Instead, implementation of a feature can start from one component/file with
+inlined logic to keep it simple at first. Continuous refactoring then drives
+the codebase to evolve naturally into a fully decomposed, structured form.
 
-B. Meyer. [The new culture of Software Development: Reflections on the Practice of Object-Oriented Design](https://www.researchgate.net/publication/242361456_The_new_culture_of_Software_Development_Reflections_on_the_Practice_of_Object-Oriented_Design)
+Any feature can be built quickly from scratch, or by copy/pasting bits and
+units from other features, with later generalization of commonalities.
 
-Kent C. Dodds. [AHA programming](https://kentcdodds.com/blog/aha-programming)
-
-## Outside-in development
+### Outside-in development
 
 The practice defines the directions of application development. At a high
 level the development process is `outside-in`. The implementation starts from
@@ -61,7 +56,7 @@ The implementation of inner units and abstractions (e.g. `presenter`,
 common abstractions and units based on the existing declarations and
 implementations.
 
-### Practical aspects
+#### Practical aspects
 
 The practice defines the basic flow of a feature implementation:
 
@@ -102,4 +97,53 @@ E. Bache. [Outside-In Development with Double Loop TDD](https://coding-is-like-c
 
 React.dev. [Thinking in React](https://react.dev/learn/thinking-in-react)
 
+## Architecture-agnostic conventions
 
+Clean Reactive Architecture stays neutral on the conventions below. Each note
+simply shows how the architecture relates to the choice.
+
+### Git branching model
+
+Clean Reactive Architecture supports any git branching model. Features can be
+delivered with long-lived feature branches (Git Flow) or granularly, unit by
+unit (Trunk-based Development). The architecture guides how work can be split
+into chunks.
+
+See also: 
+
+V. Driessen. [A successful Git branching
+model](https://nvie.com/posts/a-successful-git-branching-model)
+
+[Trunk Based Development](https://trunkbaseddevelopment.com/)
+
+A. Ruka
+[OneFlow](https://www.endoflineblog.com/oneflow-a-git-branching-model-and-workflow)
+
+Github.com [GitHub
+flow](https://docs.github.com/en/get-started/using-github/github-flow)
+
+### Folder structure
+
+Clean Reactive Architecture supports any folder structure.
+
+Files can be grouped by architectural layer (layered structure), where a
+single feature is spread across every layer folder - all presenters together,
+all use cases together, and so on.
+
+Files can also be grouped by feature (vertical-sliced structure), where each
+feature folder holds its own set of architectural units. A feature is a
+self-contained, composable widget, and features in turn are composed into
+route-driven pages.
+
+Either works. Whichever is chosen, the units carry their role and
+responsobility. It is a good idea to name the files holding them with explicit
+suffixes (`UseCase`, `Presenter`, `Repository`, etc.), so each file's purpose
+is clear regardless of where it sits.
+
+See also: 
+
+S. Brown. [Package by Component and Architecturally-aligned
+Testing](https://dzone.com/articles/package-component-and)
+
+M Fowler. [Presentation Domain Data
+Layering](https://martinfowler.com/bliki/PresentationDomainDataLayering.html)
