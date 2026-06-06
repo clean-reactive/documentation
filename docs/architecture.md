@@ -50,6 +50,17 @@ Clean Reactive Architecture is outlined with the following UML diagram:
 The *double lines* on the diagram represent boundaries, which data crosses as
 primitive data types or data structures, for example DTOs or plain objects.
 
+See also: 
+
+Robert C. Martin. [The Clean
+Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+
+Robert C. Martin. (2017). [Clean Architecture: A Craftsman's Guide to
+Software Structure and
+Design](https://www.amazon.nl/Clean-Architecture-Craftsmans-Software-Structure/dp/0134494164/)
+
+## Q&A
+
 <details>
   <summary><b>Where did the diagram come from?</b></summary>
 
@@ -95,7 +106,7 @@ independent of any single use case invocation**.
 Consider the runtime state of an asynchronous refresh: `idle`, `loading`,
 `error` with a message. This state has its own valid configuration
 (transitions are not random - it cannot move directly from `error` to
-`loading`, it requires an explicit retry; an `idle` state cannot have an error
+`loading`, it requires an explicit retry, an `idle` state cannot have an error
 message). The state has its own observable lifetime - different parts of the
 user interface may react to it independently. It makes sense only within
 applications that perform asynchronous synchronization. And it persists across
@@ -288,8 +299,42 @@ which is acceptable, except the case where the repository defines the contract
 rather than consume it. This is not desired, and the development methodology
 prevents it.
 
-![clean-reactive-architecture-repository-with-gateway-interface.png](images/clean-reactive-architecture-repository-with-gateway-interface.png)
+![clean-reactive-architecture-repository-with-gateway-interface](images/clean-reactive-architecture-repository-with-gateway-interface.png)
 
+
+</details>
+
+<details>
+  <summary><b>Is the user interface special?</b></summary>
+
+The `user interface` is not a privileged unit, it is a detail. Clean Reactive
+Architecture treats the user interface as one driver among several.  
+
+A **driver** exercises the core: it provides input through controllers and
+observes the core changes. Each driver provides its _own controllers and
+presenters implementations_, which are  _not shared across drivers_. What is
+shared is the core: `use case`, `entities` and `gateway<I>` that every
+driver's controllers and presenters meet. 
+
+![clean-reactive-architecture-user-interface-driver](images/clean-reactive-architecture-user-interface-driver.png)
+
+Common drivers:
+
+- a *test harness* drives the core through controllers and observes state to
+  assert against it;
+- a *notification or deep link* drives the core when an external event
+  arrives;
+
+Let's consider a WebSocket. Incoming messages drive the core: a listener
+receives them and feeds them in through a controller, exactly as a user
+gesture would. Outgoing commands take the other path: they leave the core
+through a gateway, since the socket is also an external resource. The same
+connection is therefore _both_ a driver (inbound) and an external resource
+(outbound), sitting on both sides of the core - the core does not know (and
+does not care) that the input arriving through its controller and the output
+leaving through its gateway belong to the same socket.
+
+![clean-reactive-architecture-web-socket-driver](images/clean-reactive-architecture-web-socket-driver.png)
 
 </details>
 
