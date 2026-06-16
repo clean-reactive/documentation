@@ -2,12 +2,21 @@
 
 Clean Reactive Architecture is an implementation of the [Clean Architecture
 concept](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html).
-For everything not specified below engineers and developers should rely on the
-concept.
+
+The Clean Architecture concept remains the primary source of truth. This
+document does not redefine its principles, instead, it provides concrete
+guidance and conventions for areas where the original concept is intentionally
+abstract or implementation-agnostic.
+
+Unless explicitly stated otherwise, engineers and developers should rely on
+the principles of Clean Architecture when making architectural decisions.
 
 Clean Reactive Architecture is outlined with the following UML diagram:
 
 ![clean-reactive-architecture](images/clean-reactive-architecture.svg)
+
+The *double lines* on the diagram represent boundaries, which data crosses as
+primitive data types or data structures, for example DTOs or plain objects.
 
 ### Definition of units
 
@@ -46,9 +55,6 @@ Clean Reactive Architecture is outlined with the following UML diagram:
   represented as an object structure.
 - **Valid State**: One of a finite number of states considered valid according
   to the enterprise and application business rules.
-
-The *double lines* on the diagram represent boundaries, which data crosses as
-primitive data types or data structures, for example DTOs or plain objects.
 
 See also: 
 
