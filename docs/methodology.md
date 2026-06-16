@@ -1,6 +1,6 @@
 # Development Methodology
 
-Developers and teams may apply any preferred practices and conventions.
+Individuals and teams may apply any preferred practices and conventions.
 However the following should be considered. 
 
 ## Complementary practices
@@ -48,7 +48,7 @@ through the entire application - through the layers and levels of abstraction.
 The implementation of the `user interface` unit is made `top-down`: create a
 single large layout, which covers the feature's requirements, then decompose
 it into smaller reusable parts. An additional methodology can be applied here,
-so the parts can be easily (from a layout perspective) reused and composed
+so the parts can be easily (from the layout perspective) reused and composed
 back into something new (e.g. a new screen).
 
 The implementation of inner units and abstractions (e.g. `presenter`,
@@ -72,7 +72,7 @@ The practice defines the basic flow of a feature implementation:
 
 Interfaces are not designed upfront - they are extracted from their consumers
 as the flow reaches them. For example, the `user interface` defines
-`presenter<I>` and `controller<I>` (step 2), the use case (step 6) defines
+`presenter<I>` and `controller<I>` (step 2), the `use case` (step 6) defines
 `gateway<I>` (step 7).  Each interface comes from an existing concrete need
 rather than guessed in advance - so it fits exactly what the consumer uses,
 nothing more.
@@ -132,7 +132,7 @@ all use cases together, and so on.
 
 Files can also be grouped by feature (vertical-sliced structure), where each
 feature folder holds its own set of architectural units. A feature is a
-self-contained, composable widget, and features in turn are composed into
+self-contained, composable widget. Features in turn are composed into
 route-driven pages.
 
 Either works. Whichever is chosen, the units carry their role and
