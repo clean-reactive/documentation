@@ -1,6 +1,6 @@
 # Development Methodology
 
-Individuals and teams may apply any preferred practices and conventions.
+Engineers and developers may apply any preferred practices and conventions.
 However the following should be considered. 
 
 ## Complementary practices
@@ -20,10 +20,10 @@ through four mandatory steps:
 Generalization is the effort of transforming program elements into reusable
 software components.
 
-> NOTE: developers should keep in mind that, even though the process is
-> formalized, generalization is not completely mechanical. The decision to
-> create a commonality should be driven by the broader context, including the
-> application's evolution and business roadmap.
+> NOTE: Even though the process is formalized, generalization is not
+> completely mechanical. The decision to create a commonality should be driven
+> by the broader context, including the application's evolution and business
+> roadmap.
 
 #### Practical aspects
 
@@ -37,6 +37,12 @@ the codebase to evolve naturally into a fully decomposed, structured form.
 
 Any feature can be built quickly from scratch, or by copy/pasting bits and
 units from other features, with later generalization of commonalities.
+
+See also:
+
+B. Meyer [The new culture of Software Development: Reflections on the Practice
+of Object-Oriented
+Design](https://www.researchgate.net/publication/242361456_The_new_culture_of_Software_Development_Reflections_on_the_Practice_of_Object-Oriented_Design)
 
 ### Outside-in development
 
@@ -93,9 +99,9 @@ See also:
 
 Freeman, S., & Pryce, N. (2009). [Growing Object-Oriented Software, Guided by Tests. Addison-Wesley Professional](https://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627)
 
-E. Bache. [Outside-In Development with Double Loop TDD](https://coding-is-like-cooking.info/2013/04/outside-in-development-with-double-loop-tdd/)
+E. Bache [Outside-In Development with Double Loop TDD](https://coding-is-like-cooking.info/2013/04/outside-in-development-with-double-loop-tdd/)
 
-React.dev. [Thinking in React](https://react.dev/learn/thinking-in-react)
+React.dev [Thinking in React](https://react.dev/learn/thinking-in-react)
 
 ## Architecture-agnostic conventions
 
@@ -106,12 +112,12 @@ simply shows how the architecture relates to the choice.
 
 Clean Reactive Architecture supports any git branching model. Features can be
 delivered with long-lived feature branches (Git Flow) or granularly, unit by
-unit (Trunk-based Development). The architecture guides how work can be split
-into chunks.
+unit (Trunk-based Development). The architecture gives insight on how work can
+be split into chunks.
 
 See also: 
 
-V. Driessen. [A successful Git branching
+V. Driessen [A successful Git branching
 model](https://nvie.com/posts/a-successful-git-branching-model)
 
 [Trunk Based Development](https://trunkbaseddevelopment.com/)
@@ -142,8 +148,8 @@ is clear regardless of where it sits.
 
 See also: 
 
-S. Brown. [Package by Component and Architecturally-aligned
+S. Brown [Package by Component and Architecturally-aligned
 Testing](https://dzone.com/articles/package-component-and)
 
-M Fowler. [Presentation Domain Data
+M. Fowler [Presentation Domain Data
 Layering](https://martinfowler.com/bliki/PresentationDomainDataLayering.html)

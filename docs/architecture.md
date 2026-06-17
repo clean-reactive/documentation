@@ -5,8 +5,8 @@ concept](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture
 
 The Clean Architecture concept remains the primary source of truth. This
 document does not redefine its principles, instead, it provides concrete
-guidance and conventions for areas where the original concept is intentionally
-abstract or implementation-agnostic.
+guidance for areas where the original concept is abstract or
+implementation-agnostic.
 
 Unless explicitly stated otherwise, engineers and developers should rely on
 the principles of Clean Architecture when making architectural decisions.
@@ -256,9 +256,9 @@ Architecture of the core (library):
 ![clean-reactive-architecture](images/ca-non-reactive.png)
 
 In fact, the core (library) implementation can follow any other architectural
-concept — hexagonal, DDD, or none at all. It can even be developed in parallel
-with a reactive client - the client's gateway will connect the two parts
-later.
+concept, for example, hexagonal, or none at all. It can even be developed in
+parallel with a reactive client - the client's gateway will connect the two
+parts later.
 
 </details>
 
