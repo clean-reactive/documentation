@@ -18,6 +18,57 @@ Clean Reactive Architecture is outlined with the following UML diagram:
 The *double lines* on the diagram represent boundaries, which data crosses as
 primitive data types or data structures, for example DTOs or plain objects.
 
+
+<details>
+  <summary>Mermaid version</summary>
+
+```mermaid
+  graph TD
+
+subgraph B1["Boundary"]
+G[Gateway]
+ER[External Resource]
+end
+
+
+subgraph B2["Boundary"]
+UI[User Interface]
+end
+
+
+subgraph B3["Boundary"]
+E[Entities]
+end
+
+
+P[Presenter]
+C[Controller]
+PI[Presenter Interface]
+CI[Controller Interface]
+UC[Use Case Interactor]
+
+
+%% dependency relation
+UI --> PI
+UI --> CI
+
+%% implementation relation
+P -. implements .-> PI
+C -. implements .-> CI
+
+C --> UC
+P --> E
+UC --> E
+UC --> G
+G --> ER
+
+classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
+class B1,B2,B3 boundary;
+
+```
+
+</details>
+
 ### Definition of units
 
 - **Entities**: A unit that maintains one or more enterprise business
@@ -56,7 +107,7 @@ primitive data types or data structures, for example DTOs or plain objects.
 - **Valid State**: One of a finite number of states considered valid according
   to the enterprise and application business rules.
 
-See also: 
+See also:
 
 Robert C. Martin. [The Clean
 Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
@@ -97,7 +148,7 @@ constructed as follows:
 > folder structure. Units are how the system should be thought about at
 > runtime - which unit owns what, dependencies, where responsibilities lie.
 > How units are organized into files is a separate organizational decision,
-> independent of the architecture. 
+> independent of the architecture.
 
 </details>
 
@@ -161,7 +212,7 @@ Unidirectional flow of control and data is the following:
 The `controller` receives user input, the `presenter` reacts and projects
 `entities` for the `user interface`. They both are never connected to each
 other - they share only the `entities`, where one path writes and the other
-reads. There is no single unit (hub) which sits on both paths. 
+reads. There is no single unit (hub) which sits on both paths.
 
 </details>
 
@@ -247,7 +298,7 @@ High level architecture:
 
 ![shared-core-library](images/shared-core-library.png)
 
-Architecture of the reactive client: 
+Architecture of the reactive client:
 
 ![clean-reactive-architecture](images/clean-reactive-architecture.png)
 
@@ -293,7 +344,7 @@ interface UserBooksPresenter {
 
 Here `userName` and `books` are properties of the `UserBooksPresenter`
 interface, each property return own ViewModel - `userName` a primitive value,
-`books` a structured one. 
+`books` a structured one.
 
 </details>
 
@@ -321,13 +372,13 @@ prevents it.
   <summary><b>Where does an alternative driver fit?</b></summary>
 
 The `user interface` is not a privileged unit, it is a detail. Clean Reactive
-Architecture treats the `user interface` as one driver among several.  
+Architecture treats the `user interface` as one driver among several.
 
 A **driver** exercises the core: it provides input through controllers and
 observes the core's changes through presenters. Normally each driver has its
 _own controller and presenter implementations_, which are specific to a
 particular driver. What is shared is the core: `use case`, `entities` and
-`gateway<I>` that every driver's controllers and presenters meet. 
+`gateway<I>` that every driver's controllers and presenters meet.
 
 ![clean-reactive-architecture-driver-user-interface](images/clean-reactive-architecture-driver-user-interface.png)
 
@@ -379,7 +430,7 @@ become thin - the BFF returns data already shaped for the client.  As the
 client's needs evolve, the gateways begin accumulating adaptations again,
 signalling the next round of BFF update.
 
-See also: 
+See also:
 
 S. Newman. [Pattern: Backends For Frontends](https://samnewman.io/patterns/architectural/bff/)
 
@@ -388,7 +439,7 @@ S. Newman. [Pattern: Backends For Frontends](https://samnewman.io/patterns/archi
 <details>
   <summary><b>How does it map to the testing pyramid?</b></summary>
 
-Clear Reactive Architecture maps cleanly onto the testing pyramid. 
+Clear Reactive Architecture maps cleanly onto the testing pyramid.
 
 ![testing-pyramid](images/testing-pyramid.png)
 
