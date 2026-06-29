@@ -18,9 +18,8 @@ Clean Reactive Architecture is outlined with the following UML diagram:
 The *double lines* on the diagram represent boundaries, which data crosses as
 primitive data types or data structures, for example DTOs or plain objects.
 
-
 <details>
-  <summary>Mermaid version</summary>
+  <summary>mermaid</summary>
 
 ```mermaid
   graph TD
@@ -64,7 +63,6 @@ G --> ER
 
 classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
 class B1,B2,B3 boundary;
-
 ```
 
 </details>
