@@ -22,33 +22,32 @@ primitive data types or data structures, for example DTOs or plain objects.
   <summary>mermaid</summary>
 
 ```mermaid
-  graph TD
+graph TD
 
 subgraph B1["Boundary"]
 G[Gateway]
 ER[External Resource]
 end
 
-
 subgraph B2["Boundary"]
 UI[User Interface]
 end
-
 
 subgraph B3["Boundary"]
 E[Entities]
 end
 
-
 P[Presenter]
 C[Controller]
-PI[Presenter Interface]
-CI[Controller Interface]
+PI["Presenter (I)"]
+CI["Controller (I)"]
+GI["Gateway (I)"]
 UC[Use Case Interactor]
 
 %% implementation relation
 P -. implements .-> PI
 C -. implements .-> CI
+G -. implements .-> GI
 
 %% dependency relation
 UI --> PI
@@ -56,7 +55,7 @@ UI --> CI
 C --> UC
 P --> E
 UC --> E
-UC --> G
+UC --> GI
 G --> ER
 
 classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
@@ -124,10 +123,87 @@ codebase is too concrete. And a UML diagram bridges that.
 
 ![clean-architecture-implementation-flow](images/ca-implementation-flow.png)
 
+<details>
+  <summary>mermaid</summary>
+
+```mermaid
+flowchart TD
+
+A["Clean Architecture Concept"] --> B["UML Diagram (units, boundaries, flow)"]
+B --> C["Application Codebase (concrete implementation)"]
+```
+
+</details>
+
 For a typical backend application written in Java, a well-known Clean
 Architecture implementation has existed for years.
 
 ![clean-architecture-web-based-java-system](images/ca-web-based-java-system.png)
+
+<details>
+  <summary>mermaid</summary>
+
+```mermaid
+graph TD
+
+subgraph B1["Boundary"]
+C[Controller]
+P[Presenter]
+VM["View Model (DS)"]
+end
+
+ID["Input Data (DS)"]
+IB["Input Boundary (I)"]
+
+OD["Output Data (DS)"]
+OB["Output Boundary (I)"]
+
+subgraph B2["Boundary"]
+V[View]
+end
+
+UC[Use Case Interactor]
+
+DAI["Data Access Interface (I)"]
+
+subgraph B3["Boundary"]
+DA[Data Access]
+DB[Database]
+end
+
+subgraph B4["Boundary"]
+E[Entities]
+end
+
+%% implementation relations
+P -. implements .-> OB
+UC -. implements .-> IB
+DA -. implements .-> DAI
+
+
+%% dependency relations
+C --> IB
+C --> ID
+
+P --> VM
+P --> OD
+
+V --> VM
+
+UC --> ID
+UC --> OB
+UC --> OD
+UC --> DAI
+UC --> E
+
+DAI --> E
+DA --> DB
+
+classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
+class B1,B2,B3,B4 boundary;
+```
+
+</details>
 
 *Clean Architecture. A craftsman’s guide to software structure and design.
 Robert C. Martin. Copyright © 2018 Pearson Education, Inc.*
@@ -139,6 +215,81 @@ reactive application, for example with external API integration, is
 constructed as follows:
 
 ![clean-architecture-to-clean-reactive-architecture](images/ca-to-clean-reactive-architecture.png)
+
+<details>
+  <summary>mermaid</summary>
+
+```mermaid
+graph TD
+
+subgraph CA["The Clean Architecture Circle Diagram"]
+
+  subgraph L5["Frameworks & Drivers"]
+    CUI[UI]
+    CWEB[Web]
+    CDB[Database]
+    CEXT[External Interfaces]
+    CDEV[Devices]
+  end
+
+  subgraph L4["Interface Adapters"]
+    CC[Controllers]
+    CG[Gateways]
+    CP[Presenters]
+  end
+
+  subgraph L3["Application Business Rules"]
+    CUC[Use Cases]
+  end
+
+  subgraph L2["Enterprise Business Rules"]
+    CE[Entities]
+  end
+
+  %% Layer dependencies (inward direction)
+  L5 --> L4
+  L4 --> L3
+  L3 --> L2
+
+end
+
+subgraph CRA["The Clean Reactive Architecture UML Diagram"]
+
+G[Gateway]
+ER[External Resource]
+
+UI[User Interface]
+
+E[Entities]
+
+P[Presenter]
+C[Controller]
+PI["Presenter (I)"]
+CI["Controller (I)"]
+GI["Gateway (I)"]
+UC[Use Case Interactor]
+
+%% implementation relation
+P -. implements .-> PI
+C -. implements .-> CI
+G -. implements .-> GI
+
+%% dependency relation
+UI --> PI
+UI --> CI
+C --> UC
+P --> E
+UC --> E
+UC --> GI
+G --> ER
+
+end
+
+CA -. implementation .-> CRA
+
+```
+
+</details>
 
 > NOTE: The diagram shows units (conceptual responsibilities), not files or
 > folder structure. Units are how the system should be thought about at
@@ -212,21 +363,20 @@ Unidirectional flow of control and data is the following:
 graph TD
 
 G[Gateway]
+GI["Gateway (I)"]
 ER[External Resource]
-
 UI[User Interface]
-
 E[Entities]
-
 P[Presenter]
 C[Controller]
-PI[Presenter Interface]
-CI[Controller Interface]
+PI["Presenter (I)"]
+CI["Controller (I)"]
 UC[Use Case Interactor]
 
 %% implementation relation
 P -. implements .-> PI
 C -. implements .-> CI
+G -. implements .-> GI
 
 %% dependency relation
 UI --> PI
@@ -234,21 +384,20 @@ UI --> CI
 C --> UC
 P --> E
 UC --> E
-UC --> G
+UC --> GI
 G --> ER
 
-%% control flow (CF)
-UI -. CF .-> CI
-CI -. CF .-> C
-C  -. CF .-> UC
-UC -. CF .-> E
-E  -. CF .-> P
-P  -. CF .-> PI
-PI -. CF .-> UI
+%% flow
+UI -. flow .-> CI
+CI -. flow .-> C
+C  -. flow .-> UC
+UC -. flow .-> E
+E  -. flow .-> P
+P  -. flow .-> PI
+PI -. flow .-> UI
 ```
 
 </details>
-
 
 The `controller` receives user input, the `presenter` reacts and projects
 `entities` for the `user interface`. They both are never connected to each
@@ -308,6 +457,63 @@ The extended diagram is the following:
 
 ![clean-reactive-architecture-extended](images/clean-reactive-architecture-extended.svg)
 
+<details>
+  <summary>mermaid</summary>
+
+```mermaid
+graph TD
+
+subgraph B1["Boundary"]
+G[Gateway]
+ER[External Resource]
+end
+
+subgraph B2["Boundary"]
+UI[User Interface]
+end
+
+subgraph B3["Boundary"]
+E[Entities]
+end
+
+P[Presenter]
+C[Controller]
+PI["Presenter (I)"]
+CI["Controller (I)"]
+GI["Gateway (I)"]
+UC[Use Case Interactor]
+SE[Selector]
+TR[Transaction]
+EF[Effect]
+
+%% implementation relation
+P -. implements .-> PI
+C -. implements .-> CI
+G -. implements .-> GI
+
+%% dependency relation
+UI --> PI
+UI --> CI
+C --> UC
+P --> SE
+UC --> SE
+UC --> EF
+UC --> TR
+UC --> E
+SE --> E
+EF --> SE
+EF --> E
+EF --> GI
+TR --> SE
+TR --> E
+G --> ER
+
+classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
+class B1,B2,B3 boundary;
+```
+
+</details>
+
 The diagram represents units which are empirically sufficient for a quite
 large codebase.
 
@@ -339,13 +545,141 @@ High level architecture:
 
 ![shared-core-library](images/shared-core-library.png)
 
+<details>
+  <summary>mermaid</summary>
+
+```mermaid
+flowchart LR
+
+RC1[Reactive client]
+RC2[Reactive client]
+C["Core (library)"]
+
+RC1 -- depends --> C
+RC2 -- depends --> C
+
+```
+
+</details>
+
 Architecture of the reactive client:
 
 ![clean-reactive-architecture](images/clean-reactive-architecture.png)
 
+<details>
+  <summary>mermaid</summary>
+
+```mermaid
+graph TD
+
+subgraph B1["Boundary"]
+G[Gateway]
+ER[External Resource]
+end
+
+subgraph B2["Boundary"]
+UI[User Interface]
+end
+
+subgraph B3["Boundary"]
+E[Entities]
+end
+
+P[Presenter]
+C[Controller]
+PI["Presenter (I)"]
+CI["Controller (I)"]
+GI["Gateway (I)"]
+UC[Use Case Interactor]
+
+%% implementation relation
+P -. implements .-> PI
+C -. implements .-> CI
+G -. implements .-> GI
+
+%% dependency relation
+UI --> PI
+UI --> CI
+C --> UC
+P --> E
+UC --> E
+UC --> GI
+G --> ER
+
+classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
+class B1,B2,B3 boundary;
+```
+
+</details>
+
 Architecture of the core (library):
 
 ![clean-reactive-architecture](images/ca-non-reactive.png)
+
+<details>
+  <summary>mermaid</summary>
+
+```mermaid
+graph TD
+
+subgraph B1["Boundary"]
+C[Controller]
+P[Presenter]
+VM["View Model (DS)"]
+end
+
+ID["Input Data (DS)"]
+IB["Input Boundary (I)"]
+
+OD["Output Data (DS)"]
+OB["Output Boundary (I)"]
+
+subgraph B2["Boundary"]
+V[View]
+end
+
+UC[Use Case Interactor]
+
+DAI["Data Access Interface (I)"]
+
+subgraph B3["Boundary"]
+DA[Data Access]
+DB[Database]
+end
+
+subgraph B4["Boundary"]
+E[Entities]
+end
+
+%% implementation relations
+P -. implements .-> OB
+UC -. implements .-> IB
+DA -. implements .-> DAI
+
+
+%% dependency relations
+C --> IB
+C --> ID
+
+P --> VM
+P --> OD
+
+V --> VM
+
+UC --> ID
+UC --> OB
+UC --> OD
+UC --> DAI
+UC --> E
+
+DAI --> E
+DA --> DB
+
+classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
+class B1,B2,B3,B4 boundary;
+```
+
+</details>
 
 In fact, the core (library) implementation can follow any other architectural
 concept, for example, hexagonal, or none at all. It can even be developed in
@@ -363,6 +697,32 @@ meant - the data structure the `presenter` returns and the `user interface`
 consumes.
 
 ![clean-reactive-architecture-view-model](images/clean-reactive-architecture-view-model.png)
+
+<details>
+  <summary>mermaid</summary>
+
+```mermaid
+graph LR
+    subgraph B1["Boundary"]
+        UI[User Interface]
+    end
+
+    VM["ViewModel &lt;DS&gt;"]
+    PI["Presenter &lt;I&gt;"]
+    P[Presenter]
+
+    %% Relationships
+    UI -- depends --> VM
+    UI -- depends --> PI
+    P -- depends --> VM
+    P -. implements .-> PI
+
+classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
+class B1 boundary;
+
+```
+
+</details>
 
 The ViewModel is just a value: comparable, snapshotable, safe to pass around,
 trivial to construct for a preview or a test. It has no behavior, no
@@ -399,6 +759,46 @@ a separate unit for it. The repository is a composite of the `gateway` and
 
 ![clean-reactive-architecture-repository](images/clean-reactive-architecture-repository.png)
 
+<details>
+  <summary>mermaid</summary>
+
+```mermaid
+graph TD
+
+subgraph R1["Repository"]
+E[Entities]
+G[Gateway]
+end
+
+ER[External Resource]
+UI[User Interface]
+P[Presenter]
+C[Controller]
+PI["Presenter (I)"]
+CI["Controller (I)"]
+GI["Gateway (I)"]
+UC[Use Case Interactor]
+
+%% implementation relation
+P -. implements .-> PI
+C -. implements .-> CI
+G -. implements .-> GI
+
+%% dependency relation
+UI --> PI
+UI --> CI
+C --> UC
+P --> E
+UC --> E
+UC --> GI
+G --> ER
+
+classDef repository fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
+class R1 repository;
+```
+
+</details>
+
 Some implementations let the repository absorb the `gateway<I>` interface -
 which is acceptable, except the case where the repository defines the contract
 rather than consume it. This is not desired, and the development methodology
@@ -406,6 +806,45 @@ prevents it.
 
 ![clean-reactive-architecture-repository-with-gateway-interface](images/clean-reactive-architecture-repository-with-gateway-interface.png)
 
+<details>
+  <summary>mermaid</summary>
+
+```mermaid
+graph TD
+
+subgraph R1["Repository"]
+E[Entities]
+G[Gateway]
+GI["Gateway (I)"]
+end
+
+ER[External Resource]
+UI[User Interface]
+P[Presenter]
+C[Controller]
+PI["Presenter (I)"]
+CI["Controller (I)"]
+UC[Use Case Interactor]
+
+%% implementation relation
+P -. implements .-> PI
+C -. implements .-> CI
+G -. implements .-> GI
+
+%% dependency relation
+UI --> PI
+UI --> CI
+C --> UC
+P --> E
+UC --> E
+UC --> GI
+G --> ER
+
+classDef repository fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
+class R1 repository;
+```
+
+</details>
 
 </details>
 
@@ -422,6 +861,46 @@ particular driver. What is shared is the core: `use case`, `entities` and
 `gateway<I>` that every driver's controllers and presenters meet.
 
 ![clean-reactive-architecture-driver-user-interface](images/clean-reactive-architecture-driver-user-interface.png)
+
+<details>
+  <summary>mermaid</summary>
+
+```mermaid
+graph TD
+
+subgraph D1["Driver"]
+UI[User Interface]
+PI["Presenter (I)"]
+CI["Controller (I)"]
+end
+
+G[Gateway]
+ER[External Resource]
+E[Entities]
+P[Presenter]
+C[Controller]
+GI["Gateway (I)"]
+UC[Use Case Interactor]
+
+%% implementation relation
+P -. implements .-> PI
+C -. implements .-> CI
+G -. implements .-> GI
+
+%% dependency relation
+UI --> PI
+UI --> CI
+C --> UC
+P --> E
+UC --> E
+UC --> GI
+G --> ER
+
+classDef driver fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
+class D1 driver;
+```
+
+</details>
 
 Common drivers:
 
@@ -441,6 +920,51 @@ leaving through its gateway belong to the same socket.
 
 ![clean-reactive-architecture-driver-web-socket](images/clean-reactive-architecture-driver-web-socket.png)
 
+<details>
+  <summary>mermaid</summary>
+
+```mermaid
+graph TD
+
+
+subgraph D1["Driver"]
+WSL["WS Listener"]
+CI["Controller (I)"]
+end
+
+UI[User Interface]
+PI["Presenter (I)"]
+G[Gateway]
+ER[External Resource]
+E[Entities]
+P[Presenter]
+C[Controller]
+GI["Gateway (I)"]
+UC[Use Case Interactor]
+WST[WS Transmitter]
+
+%% implementation relation
+P -. implements .-> PI
+C -. implements .-> CI
+G -. implements .-> GI
+
+%% dependency relation
+UI --> PI
+UI --> CI
+C --> UC
+P --> E
+UC --> E
+UC --> GI
+G --> ER
+G --> WST
+WSL --> CI
+
+classDef driver fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
+class D1 driver;
+```
+
+</details>
+
 </details>
 
 <details>
@@ -454,6 +978,43 @@ gateways.
 
 ![clean-reactive-architecture-without-bff](images/clean-reactive-architecture-without-bff.png)
 
+<details>
+  <summary>mermaid</summary>
+
+```mermaid
+
+graph TD
+
+subgraph B1["Boundary"]
+    GI["Gateway &lt;I&gt;"]
+end
+    G["Gateway (adapt. logic)"]
+    ER["External Resource"]
+
+subgraph B2["Boundary"]
+    GAPI["General Purpose<br>Server-side API"]
+end
+
+    G -. implements .-> GI
+    G -- depends --> ER
+    ER -- depends --> GAPI
+
+%% high-level relations
+    RCC[Reactive client]
+
+subgraph B3["Boundary"]
+    CGAPI["General Purpose<br>Serve-side API"]
+end
+
+    RCC -- Depends --> CGAPI
+
+classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
+class B1,B2,B3 boundary;
+
+```
+
+</details>
+
 That accumulated adaptation is the signal for a Backend for Frontend (BFF). A
 BFF is a server-side layer built for one specific client, it performs the
 mapping and aggregation the client would otherwise do itself. In these terms,
@@ -462,6 +1023,49 @@ the adaptation moved to the server, where it can be done once and closer to
 the data.
 
 ![clean-reactive-architecture-with-bff](images/clean-reactive-architecture-with-bff.png)
+
+<details>
+  <summary>mermaid</summary>
+
+```mermaid
+
+graph TD
+
+subgraph B1["Boundary"]
+    GI["Gateway &lt;I&gt;"]
+end
+    G["Gateway"]
+    ER["External Resource"]
+
+subgraph B2["Boundary"]
+    BFF["BFF (adapt. logic)"]
+    GAPI["General Purpose<br>Server-side API"]
+end
+
+    G -. implements .-> GI
+    G -- depends --> ER
+    ER -- depends --> BFF
+    BFF -- depends --> GAPI
+
+%% high-level relations
+subgraph RCC["Reactive client"]
+    CGI["Gateway &lt;I&gt;"]
+end
+
+subgraph B3["Boundary"]
+    CBFF["Reactive Client BFF"]
+    CGAPI["General Purpose<br>Serve-side API"]
+end
+
+    CBFF -. implements .-> CGI
+    CBFF -- depends --> CGAPI
+
+classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
+class B1,B2,B3 boundary;
+
+```
+
+</details>
 
 The architecture makes this visible. Because adaptation is localized in
 gateways rather than distributed across the codebase, heavy mappers and
