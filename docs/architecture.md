@@ -46,15 +46,13 @@ PI[Presenter Interface]
 CI[Controller Interface]
 UC[Use Case Interactor]
 
-
-%% dependency relation
-UI --> PI
-UI --> CI
-
 %% implementation relation
 P -. implements .-> PI
 C -. implements .-> CI
 
+%% dependency relation
+UI --> PI
+UI --> CI
 C --> UC
 P --> E
 UC --> E
@@ -206,6 +204,51 @@ never crosses and reverses.
 Unidirectional flow of control and data is the following:
 
 ![clean-reactive-architecture-flow-of-control](images/clean-reactive-architecture-flow-of-control.png)
+
+<details>
+  <summary>mermaid</summary>
+
+```mermaid
+graph TD
+
+G[Gateway]
+ER[External Resource]
+
+UI[User Interface]
+
+E[Entities]
+
+P[Presenter]
+C[Controller]
+PI[Presenter Interface]
+CI[Controller Interface]
+UC[Use Case Interactor]
+
+%% implementation relation
+P -. implements .-> PI
+C -. implements .-> CI
+
+%% dependency relation
+UI --> PI
+UI --> CI
+C --> UC
+P --> E
+UC --> E
+UC --> G
+G --> ER
+
+%% control flow (CF)
+UI -. CF .-> CI
+CI -. CF .-> C
+C  -. CF .-> UC
+UC -. CF .-> E
+E  -. CF .-> P
+P  -. CF .-> PI
+PI -. CF .-> UI
+```
+
+</details>
+
 
 The `controller` receives user input, the `presenter` reacts and projects
 `entities` for the `user interface`. They both are never connected to each
