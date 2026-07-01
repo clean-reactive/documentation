@@ -50,13 +50,13 @@ C -. implements .-> CI
 G -. implements .-> GI
 
 %% dependency relation
-UI --> PI
-UI --> CI
-C --> UC
-P --> E
-UC --> E
-UC --> GI
-G --> ER
+UI -- depends --> PI
+UI -- depends --> CI
+C -- depends --> UC
+P -- depends --> E
+UC -- depends --> E
+UC -- depends --> GI
+G -- depends --> ER
 
 classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
 class B1,B2,B3 boundary;
@@ -182,22 +182,22 @@ DA -. implements .-> DAI
 
 
 %% dependency relations
-C --> IB
-C --> ID
+C -- depends --> IB
+C -- depends --> ID
 
-P --> VM
-P --> OD
+P -- depends --> VM
+P -- depends --> OD
 
-V --> VM
+V -- depends --> VM
 
-UC --> ID
-UC --> OB
-UC --> OD
-UC --> DAI
-UC --> E
+UC -- depends --> ID
+UC -- depends --> OB
+UC -- depends --> OD
+UC -- depends --> DAI
+UC -- depends --> E
 
-DAI --> E
-DA --> DB
+DAI -- depends --> E
+DA -- depends --> DB
 
 classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
 class B1,B2,B3,B4 boundary;
@@ -247,9 +247,9 @@ subgraph CA["The Clean Architecture Circle Diagram"]
   end
 
   %% Layer dependencies (inward direction)
-  L5 --> L4
-  L4 --> L3
-  L3 --> L2
+  L5 -- depends --> L4
+  L4 -- depends --> L3
+  L3 -- depends --> L2
 
 end
 
@@ -275,13 +275,13 @@ C -. implements .-> CI
 G -. implements .-> GI
 
 %% dependency relation
-UI --> PI
-UI --> CI
-C --> UC
-P --> E
-UC --> E
-UC --> GI
-G --> ER
+UI -- depends --> PI
+UI -- depends --> CI
+C -- depends --> UC
+P -- depends --> E
+UC -- depends --> E
+UC -- depends --> GI
+G -- depends --> ER
 
 end
 
@@ -379,13 +379,13 @@ C -. implements .-> CI
 G -. implements .-> GI
 
 %% dependency relation
-UI --> PI
-UI --> CI
-C --> UC
-P --> E
-UC --> E
-UC --> GI
-G --> ER
+UI -- depends --> PI
+UI -- depends --> CI
+C -- depends --> UC
+P -- depends --> E
+UC -- depends --> E
+UC -- depends --> GI
+G -- depends --> ER
 
 %% flow
 UI -. flow .-> CI
@@ -492,21 +492,21 @@ C -. implements .-> CI
 G -. implements .-> GI
 
 %% dependency relation
-UI --> PI
-UI --> CI
-C --> UC
-P --> SE
-UC --> SE
-UC --> EF
-UC --> TR
-UC --> E
-SE --> E
-EF --> SE
-EF --> E
-EF --> GI
-TR --> SE
-TR --> E
-G --> ER
+UI -- depends --> PI
+UI -- depends --> CI
+C -- depends --> UC
+P -- depends --> SE
+UC -- depends --> SE
+UC -- depends --> EF
+UC -- depends --> TR
+UC -- depends --> E
+SE -- depends --> E
+EF -- depends --> SE
+EF -- depends --> E
+EF -- depends --> GI
+TR -- depends --> SE
+TR -- depends --> E
+G -- depends --> ER
 
 classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
 class B1,B2,B3 boundary;
@@ -598,13 +598,13 @@ C -. implements .-> CI
 G -. implements .-> GI
 
 %% dependency relation
-UI --> PI
-UI --> CI
-C --> UC
-P --> E
-UC --> E
-UC --> GI
-G --> ER
+UI -- depends --> PI
+UI -- depends --> CI
+C -- depends --> UC
+P -- depends --> E
+UC -- depends --> E
+UC -- depends --> GI
+G -- depends --> ER
 
 classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
 class B1,B2,B3 boundary;
@@ -658,22 +658,22 @@ DA -. implements .-> DAI
 
 
 %% dependency relations
-C --> IB
-C --> ID
+C -- depends --> IB
+C -- depends --> ID
 
-P --> VM
-P --> OD
+P -- depends --> VM
+P -- depends --> OD
 
-V --> VM
+V -- depends --> VM
 
-UC --> ID
-UC --> OB
-UC --> OD
-UC --> DAI
-UC --> E
+UC -- depends --> ID
+UC -- depends --> OB
+UC -- depends --> OD
+UC -- depends --> DAI
+UC -- depends --> E
 
-DAI --> E
-DA --> DB
+DAI -- depends --> E
+DA -- depends --> DB
 
 classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
 class B1,B2,B3,B4 boundary;
@@ -785,13 +785,13 @@ C -. implements .-> CI
 G -. implements .-> GI
 
 %% dependency relation
-UI --> PI
-UI --> CI
-C --> UC
-P --> E
-UC --> E
-UC --> GI
-G --> ER
+UI -- depends --> PI
+UI -- depends --> CI
+C -- depends --> UC
+P -- depends --> E
+UC -- depends --> E
+UC -- depends --> GI
+G -- depends --> ER
 
 classDef repository fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
 class R1 repository;
@@ -832,13 +832,13 @@ C -. implements .-> CI
 G -. implements .-> GI
 
 %% dependency relation
-UI --> PI
-UI --> CI
-C --> UC
-P --> E
-UC --> E
-UC --> GI
-G --> ER
+UI -- depends --> PI
+UI -- depends --> CI
+C -- depends --> UC
+P -- depends --> E
+UC -- depends --> E
+UC -- depends --> GI
+G -- depends --> ER
 
 classDef repository fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
 class R1 repository;
@@ -888,13 +888,13 @@ C -. implements .-> CI
 G -. implements .-> GI
 
 %% dependency relation
-UI --> PI
-UI --> CI
-C --> UC
-P --> E
-UC --> E
-UC --> GI
-G --> ER
+UI -- depends --> PI
+UI -- depends --> CI
+C -- depends --> UC
+P -- depends --> E
+UC -- depends --> E
+UC -- depends --> GI
+G -- depends --> ER
 
 classDef driver fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
 class D1 driver;
@@ -949,15 +949,15 @@ C -. implements .-> CI
 G -. implements .-> GI
 
 %% dependency relation
-UI --> PI
-UI --> CI
-C --> UC
-P --> E
-UC --> E
-UC --> GI
-G --> ER
-G --> WST
-WSL --> CI
+UI -- depends --> PI
+UI -- depends --> CI
+C -- depends --> UC
+P -- depends --> E
+UC -- depends --> E
+UC -- depends --> GI
+G -- depends --> ER
+G -- depends --> WST
+WSL -- depends --> CI
 
 classDef driver fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
 class D1 driver;
@@ -1006,7 +1006,7 @@ subgraph B3["Boundary"]
     CGAPI["General Purpose<br>Serve-side API"]
 end
 
-    RCC -- Depends --> CGAPI
+    RCC -- depends --> CGAPI
 
 classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
 class B1,B2,B3 boundary;
