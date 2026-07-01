@@ -25,24 +25,24 @@ primitive data types or data structures, for example DTOs or plain objects.
 graph TD
 
 subgraph B1["Boundary"]
-G[Gateway]
-ER[External Resource]
+G["Gateway"]
+ER["External Resource"]
 end
 
 subgraph B2["Boundary"]
-UI[User Interface]
+UI["User Interface"]
 end
 
 subgraph B3["Boundary"]
-E[Entities]
+E["Entities"]
 end
 
-P[Presenter]
-C[Controller]
-PI["Presenter (I)"]
-CI["Controller (I)"]
-GI["Gateway (I)"]
-UC[Use Case Interactor]
+P["Presenter"]
+C["Controller"]
+PI["Presenter &lt;I&gt;"]
+CI["Controller &lt;I&gt;"]
+GI["Gateway &lt;I&gt;"]
+UC["Use Case Interactor"]
 
 %% implementation relation
 P -. implements .-> PI
@@ -147,32 +147,32 @@ Architecture implementation has existed for years.
 graph TD
 
 subgraph B1["Boundary"]
-C[Controller]
-P[Presenter]
-VM["View Model (DS)"]
+C["Controller"]
+P["Presenter"]
+VM["View Model &lt;DS&gt;"]
 end
 
-ID["Input Data (DS)"]
-IB["Input Boundary (I)"]
+ID["Input Data &lt;DS&gt;"]
+IB["Input Boundary &lt;I&gt;"]
 
-OD["Output Data (DS)"]
-OB["Output Boundary (I)"]
+OD["Output Data &lt;DS&gt;"]
+OB["Output Boundary &lt;I&gt;"]
 
 subgraph B2["Boundary"]
-V[View]
+V["View"]
 end
 
-UC[Use Case Interactor]
+UC["Use Case Interactor"]
 
-DAI["Data Access Interface (I)"]
+DAI["Data Access Interface &lt;I&gt;"]
 
 subgraph B3["Boundary"]
-DA[Data Access]
-DB[Database]
+DA["Data Access"]
+DB["Database"]
 end
 
 subgraph B4["Boundary"]
-E[Entities]
+E["Entities"]
 end
 
 %% implementation relations
@@ -225,25 +225,25 @@ graph TD
 subgraph CA["The Clean Architecture Circle Diagram"]
 
   subgraph L5["Frameworks & Drivers"]
-    CUI[UI]
-    CWEB[Web]
-    CDB[Database]
-    CEXT[External Interfaces]
-    CDEV[Devices]
+    CUI["UI"]
+    CWEB["Web"]
+    CDB["Database"]
+    CEXT["External Interfaces"]
+    CDEV["Devices"]
   end
 
   subgraph L4["Interface Adapters"]
-    CC[Controllers]
-    CG[Gateways]
-    CP[Presenters]
+    CC["Controllers"]
+    CG["Gateways"]
+    CP["Presenters"]
   end
 
   subgraph L3["Application Business Rules"]
-    CUC[Use Cases]
+    CUC["Use Cases"]
   end
 
   subgraph L2["Enterprise Business Rules"]
-    CE[Entities]
+    CE["Entities"]
   end
 
   %% Layer dependencies (inward direction)
@@ -255,19 +255,19 @@ end
 
 subgraph CRA["The Clean Reactive Architecture UML Diagram"]
 
-G[Gateway]
-ER[External Resource]
+G["Gateway"]
+ER["External Resource"]
 
-UI[User Interface]
+UI["User Interface"]
 
-E[Entities]
+E["Entities"]
 
-P[Presenter]
-C[Controller]
-PI["Presenter (I)"]
-CI["Controller (I)"]
-GI["Gateway (I)"]
-UC[Use Case Interactor]
+P["Presenter"]
+C["Controller"]
+PI["Presenter &lt;I&gt;"]
+CI["Controller &lt;I&gt;"]
+GI["Gateway &lt;I&gt;"]
+UC["Use Case Interactor"]
 
 %% implementation relation
 P -. implements .-> PI
@@ -362,16 +362,16 @@ Unidirectional flow of control and data is the following:
 ```mermaid
 graph TD
 
-G[Gateway]
-GI["Gateway (I)"]
-ER[External Resource]
-UI[User Interface]
-E[Entities]
-P[Presenter]
-C[Controller]
-PI["Presenter (I)"]
-CI["Controller (I)"]
-UC[Use Case Interactor]
+G["Gateway"]
+GI["Gateway &lt;I&gt;"]
+ER["External Resource"]
+UI["User Interface"]
+E["Entities"]
+P["Presenter"]
+C["Controller"]
+PI["Presenter &lt;I&gt;"]
+CI["Controller &lt;I&gt;"]
+UC["Use Case Interactor"]
 
 %% implementation relation
 P -. implements .-> PI
@@ -464,27 +464,27 @@ The extended diagram is the following:
 graph TD
 
 subgraph B1["Boundary"]
-G[Gateway]
-ER[External Resource]
+G["Gateway"]
+ER["External Resource"]
 end
 
 subgraph B2["Boundary"]
-UI[User Interface]
+UI["User Interface"]
 end
 
 subgraph B3["Boundary"]
-E[Entities]
+E["Entities"]
 end
 
-P[Presenter]
-C[Controller]
-PI["Presenter (I)"]
-CI["Controller (I)"]
-GI["Gateway (I)"]
-UC[Use Case Interactor]
-SE[Selector]
-TR[Transaction]
-EF[Effect]
+P["Presenter"]
+C["Controller"]
+PI["Presenter &lt;I&gt;"]
+CI["Controller &lt;I&gt;"]
+GI["Gateway &lt;I&gt;"]
+UC["Use Case Interactor"]
+SE["Selector"]
+TR["Transaction"]
+EF["Effect"]
 
 %% implementation relation
 P -. implements .-> PI
@@ -551,8 +551,8 @@ High level architecture:
 ```mermaid
 flowchart LR
 
-RC1[Reactive client]
-RC2[Reactive client]
+RC1["Reactive client"]
+RC2["Reactive client"]
 C["Core (library)"]
 
 RC1 -- depends --> C
@@ -573,24 +573,24 @@ Architecture of the reactive client:
 graph TD
 
 subgraph B1["Boundary"]
-G[Gateway]
-ER[External Resource]
+G["Gateway"]
+ER["External Resource"]
 end
 
 subgraph B2["Boundary"]
-UI[User Interface]
+UI["User Interface"]
 end
 
 subgraph B3["Boundary"]
-E[Entities]
+E["Entities"]
 end
 
-P[Presenter]
-C[Controller]
-PI["Presenter (I)"]
-CI["Controller (I)"]
-GI["Gateway (I)"]
-UC[Use Case Interactor]
+P["Presenter"]
+C["Controller"]
+PI["Presenter &lt;I&gt;"]
+CI["Controller &lt;I&gt;"]
+GI["Gateway &lt;I&gt;"]
+UC["Use Case Interactor"]
 
 %% implementation relation
 P -. implements .-> PI
@@ -623,32 +623,32 @@ Architecture of the core (library):
 graph TD
 
 subgraph B1["Boundary"]
-C[Controller]
-P[Presenter]
-VM["View Model (DS)"]
+C["Controller"]
+P["Presenter"]
+VM["View Model &lt;DS&gt;"]
 end
 
-ID["Input Data (DS)"]
-IB["Input Boundary (I)"]
+ID["Input Data &lt;DS&gt;"]
+IB["Input Boundary &lt;I&gt;"]
 
-OD["Output Data (DS)"]
-OB["Output Boundary (I)"]
+OD["Output Data &lt;DS&gt;"]
+OB["Output Boundary &lt;I&gt;"]
 
 subgraph B2["Boundary"]
-V[View]
+V["View"]
 end
 
-UC[Use Case Interactor]
+UC["Use Case Interactor"]
 
-DAI["Data Access Interface (I)"]
+DAI["Data Access Interface &lt;I&gt;"]
 
 subgraph B3["Boundary"]
-DA[Data Access]
-DB[Database]
+DA["Data Access"]
+DB["Database"]
 end
 
 subgraph B4["Boundary"]
-E[Entities]
+E["Entities"]
 end
 
 %% implementation relations
@@ -704,12 +704,12 @@ consumes.
 ```mermaid
 graph LR
     subgraph B1["Boundary"]
-        UI[User Interface]
+        UI["User Interface"]
     end
 
     VM["ViewModel &lt;DS&gt;"]
     PI["Presenter &lt;I&gt;"]
-    P[Presenter]
+    P["Presenter"]
 
     %% Relationships
     UI -- depends --> VM
@@ -766,18 +766,18 @@ a separate unit for it. The repository is a composite of the `gateway` and
 graph TD
 
 subgraph R1["Repository"]
-E[Entities]
-G[Gateway]
+E["Entities"]
+G["Gateway"]
 end
 
-ER[External Resource]
-UI[User Interface]
-P[Presenter]
-C[Controller]
-PI["Presenter (I)"]
-CI["Controller (I)"]
-GI["Gateway (I)"]
-UC[Use Case Interactor]
+ER["External Resource"]
+UI["User Interface"]
+P["Presenter"]
+C["Controller"]
+PI["Presenter &lt;I&gt;"]
+CI["Controller &lt;I&gt;"]
+GI["Gateway &lt;I&gt;"]
+UC["Use Case Interactor"]
 
 %% implementation relation
 P -. implements .-> PI
@@ -813,18 +813,18 @@ prevents it.
 graph TD
 
 subgraph R1["Repository"]
-E[Entities]
-G[Gateway]
-GI["Gateway (I)"]
+E["Entities"]
+G["Gateway"]
+GI["Gateway &lt;I&gt;"]
 end
 
-ER[External Resource]
-UI[User Interface]
-P[Presenter]
-C[Controller]
-PI["Presenter (I)"]
-CI["Controller (I)"]
-UC[Use Case Interactor]
+ER["External Resource"]
+UI["User Interface"]
+P["Presenter"]
+C["Controller"]
+PI["Presenter &lt;I&gt;"]
+CI["Controller &lt;I&gt;"]
+UC["Use Case Interactor"]
 
 %% implementation relation
 P -. implements .-> PI
@@ -869,18 +869,18 @@ particular driver. What is shared is the core: `use case`, `entities` and
 graph TD
 
 subgraph D1["Driver"]
-UI[User Interface]
-PI["Presenter (I)"]
-CI["Controller (I)"]
+UI["User Interface"]
+PI["Presenter &lt;I&gt;"]
+CI["Controller &lt;I&gt;"]
 end
 
-G[Gateway]
-ER[External Resource]
-E[Entities]
-P[Presenter]
-C[Controller]
-GI["Gateway (I)"]
-UC[Use Case Interactor]
+G["Gateway"]
+ER["External Resource"]
+E["Entities"]
+P["Presenter"]
+C["Controller"]
+GI["Gateway &lt;I&gt;"]
+UC["Use Case Interactor"]
 
 %% implementation relation
 P -. implements .-> PI
@@ -929,19 +929,19 @@ graph TD
 
 subgraph D1["Driver"]
 WSL["WS Listener"]
-CI["Controller (I)"]
+CI["Controller &lt;I&gt;"]
 end
 
-UI[User Interface]
-PI["Presenter (I)"]
-G[Gateway]
-ER[External Resource]
-E[Entities]
-P[Presenter]
-C[Controller]
-GI["Gateway (I)"]
-UC[Use Case Interactor]
-WST[WS Transmitter]
+UI["User Interface"]
+PI["Presenter &lt;I&gt;"]
+G["Gateway"]
+ER["External Resource"]
+E["Entities"]
+P["Presenter"]
+C["Controller"]
+GI["Gateway &lt;I&gt;"]
+UC["Use Case Interactor"]
+WST["WS Transmitter"]
 
 %% implementation relation
 P -. implements .-> PI
@@ -992,7 +992,7 @@ end
     ER["External Resource"]
 
 subgraph B2["Boundary"]
-    GAPI["General Purpose<br>Server-side API"]
+    GAPI["General Purpose Server-side API"]
 end
 
     G -. implements .-> GI
@@ -1000,10 +1000,10 @@ end
     ER -- depends --> GAPI
 
 %% high-level relations
-    RCC[Reactive client]
+    RCC["Reactive client"]
 
 subgraph B3["Boundary"]
-    CGAPI["General Purpose<br>Serve-side API"]
+    CGAPI["General Purpose Serve-side API"]
 end
 
     RCC -- depends --> CGAPI
@@ -1039,7 +1039,7 @@ end
 
 subgraph B2["Boundary"]
     BFF["BFF (adapt. logic)"]
-    GAPI["General Purpose<br>Server-side API"]
+    GAPI["General Purpose Server-side API"]
 end
 
     G -. implements .-> GI
@@ -1054,7 +1054,7 @@ end
 
 subgraph B3["Boundary"]
     CBFF["Reactive Client BFF"]
-    CGAPI["General Purpose<br>Serve-side API"]
+    CGAPI["General Purpose Serve-side API"]
 end
 
     CBFF -. implements .-> CGI
