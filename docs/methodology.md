@@ -1,7 +1,7 @@
 # Development Methodology
 
 Engineers and developers may apply any preferred practices and conventions.
-However the following should be considered. 
+However the following should be considered.
 
 ## Complementary practices
 
@@ -16,6 +16,25 @@ software development*. In short, each unit, feature and application goes
 through four mandatory steps:
 
 ![cluster-model-of-software-development](images/model-of-software-development.png)
+
+<details>
+   <summary>mermaid</summary>
+
+```mermaid
+
+graph LR
+    1["1. Specification"]
+    2["2. Design / Implementation"]
+    3["3. Validation"]
+    4["4. Generalization"]
+
+    1 --> 2
+    2 --> 3
+    3 --> 4
+
+```
+
+</details>
 
 Generalization is the effort of transforming program elements into reusable
 software components.
@@ -115,7 +134,7 @@ delivered with long-lived feature branches (Git Flow) or granularly, unit by
 unit (Trunk-based Development). The architecture gives insight on how work can
 be split into chunks.
 
-See also: 
+See also:
 
 V. Driessen [A successful Git branching
 model](https://nvie.com/posts/a-successful-git-branching-model)
@@ -146,7 +165,7 @@ responsobility. It is a good idea to name the files holding them with explicit
 suffixes (`UseCase`, `Presenter`, `Repository`, etc.), so each file's purpose
 is clear regardless of where it sits.
 
-See also: 
+See also:
 
 S. Brown [Package by Component and Architecturally-aligned
 Testing](https://dzone.com/articles/package-component-and)
