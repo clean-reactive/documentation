@@ -25,16 +25,16 @@ primitive data types or data structures, for example DTOs or plain objects.
 graph TD
 
 subgraph B1["Boundary"]
-G["Gateway"]
-ER["External Resource"]
+  G["Gateway"]
+  ER["External Resource"]
 end
 
 subgraph B2["Boundary"]
-UI["User Interface"]
+  UI["User Interface"]
 end
 
 subgraph B3["Boundary"]
-E["Entities"]
+  E["Entities"]
 end
 
 P["Presenter"]
@@ -147,9 +147,9 @@ Architecture implementation has existed for years.
 graph TD
 
 subgraph B1["Boundary"]
-C["Controller"]
-P["Presenter"]
-VM["View Model &lt;DS&gt;"]
+  C["Controller"]
+  P["Presenter"]
+  VM["View Model &lt;DS&gt;"]
 end
 
 ID["Input Data &lt;DS&gt;"]
@@ -159,7 +159,7 @@ OD["Output Data &lt;DS&gt;"]
 OB["Output Boundary &lt;I&gt;"]
 
 subgraph B2["Boundary"]
-V["View"]
+  V["View"]
 end
 
 UC["Use Case Interactor"]
@@ -167,19 +167,18 @@ UC["Use Case Interactor"]
 DAI["Data Access Interface &lt;I&gt;"]
 
 subgraph B3["Boundary"]
-DA["Data Access"]
-DB["Database"]
+  DA["Data Access"]
+  DB["Database"]
 end
 
 subgraph B4["Boundary"]
-E["Entities"]
+  E["Entities"]
 end
 
 %% implementation relations
 P -. implements .-> OB
 UC -. implements .-> IB
 DA -. implements .-> DAI
-
 
 %% dependency relations
 C -- depends --> IB
@@ -255,38 +254,37 @@ end
 
 subgraph CRA["The Clean Reactive Architecture UML Diagram"]
 
-G["Gateway"]
-ER["External Resource"]
+  G["Gateway"]
+  ER["External Resource"]
 
-UI["User Interface"]
+  UI["User Interface"]
 
-E["Entities"]
+  E["Entities"]
 
-P["Presenter"]
-C["Controller"]
-PI["Presenter &lt;I&gt;"]
-CI["Controller &lt;I&gt;"]
-GI["Gateway &lt;I&gt;"]
-UC["Use Case Interactor"]
+  P["Presenter"]
+  C["Controller"]
+  PI["Presenter &lt;I&gt;"]
+  CI["Controller &lt;I&gt;"]
+  GI["Gateway &lt;I&gt;"]
+  UC["Use Case Interactor"]
 
-%% implementation relation
-P -. implements .-> PI
-C -. implements .-> CI
-G -. implements .-> GI
+  %% implementation relation
+  P -. implements .-> PI
+  C -. implements .-> CI
+  G -. implements .-> GI
 
-%% dependency relation
-UI -- depends --> PI
-UI -- depends --> CI
-C -- depends --> UC
-P -- depends --> E
-UC -- depends --> E
-UC -- depends --> GI
-G -- depends --> ER
+  %% dependency relation
+  UI -- depends --> PI
+  UI -- depends --> CI
+  C -- depends --> UC
+  P -- depends --> E
+  UC -- depends --> E
+  UC -- depends --> GI
+  G -- depends --> ER
 
 end
 
 CA -. implementation .-> CRA
-
 ```
 
 </details>
@@ -390,10 +388,10 @@ G -- depends --> ER
 %% flow
 UI -. flow .-> CI
 CI -. flow .-> C
-C  -. flow .-> UC
+C -. flow .-> UC
 UC -. flow .-> E
-E  -. flow .-> P
-P  -. flow .-> PI
+E -. flow .-> P
+P -. flow .-> PI
 PI -. flow .-> UI
 ```
 
@@ -464,16 +462,16 @@ The extended diagram is the following:
 graph TD
 
 subgraph B1["Boundary"]
-G["Gateway"]
-ER["External Resource"]
+  G["Gateway"]
+  ER["External Resource"]
 end
 
 subgraph B2["Boundary"]
-UI["User Interface"]
+  UI["User Interface"]
 end
 
 subgraph B3["Boundary"]
-E["Entities"]
+  E["Entities"]
 end
 
 P["Presenter"]
@@ -557,7 +555,6 @@ C["Core (library)"]
 
 RC1 -- depends --> C
 RC2 -- depends --> C
-
 ```
 
 </details>
@@ -573,16 +570,16 @@ Architecture of the reactive client:
 graph TD
 
 subgraph B1["Boundary"]
-G["Gateway"]
-ER["External Resource"]
+  G["Gateway"]
+  ER["External Resource"]
 end
 
 subgraph B2["Boundary"]
-UI["User Interface"]
+  UI["User Interface"]
 end
 
 subgraph B3["Boundary"]
-E["Entities"]
+  E["Entities"]
 end
 
 P["Presenter"]
@@ -623,9 +620,9 @@ Architecture of the core (library):
 graph TD
 
 subgraph B1["Boundary"]
-C["Controller"]
-P["Presenter"]
-VM["View Model &lt;DS&gt;"]
+  C["Controller"]
+  P["Presenter"]
+  VM["View Model &lt;DS&gt;"]
 end
 
 ID["Input Data &lt;DS&gt;"]
@@ -635,7 +632,7 @@ OD["Output Data &lt;DS&gt;"]
 OB["Output Boundary &lt;I&gt;"]
 
 subgraph B2["Boundary"]
-V["View"]
+  V["View"]
 end
 
 UC["Use Case Interactor"]
@@ -643,19 +640,18 @@ UC["Use Case Interactor"]
 DAI["Data Access Interface &lt;I&gt;"]
 
 subgraph B3["Boundary"]
-DA["Data Access"]
-DB["Database"]
+  DA["Data Access"]
+  DB["Database"]
 end
 
 subgraph B4["Boundary"]
-E["Entities"]
+  E["Entities"]
 end
 
 %% implementation relations
 P -. implements .-> OB
 UC -. implements .-> IB
 DA -. implements .-> DAI
-
 
 %% dependency relations
 C -- depends --> IB
@@ -703,23 +699,23 @@ consumes.
 
 ```mermaid
 graph LR
-    subgraph B1["Boundary"]
-        UI["User Interface"]
-    end
 
-    VM["ViewModel &lt;DS&gt;"]
-    PI["Presenter &lt;I&gt;"]
-    P["Presenter"]
+subgraph B1["Boundary"]
+  UI["User Interface"]
+end
 
-    %% Relationships
-    UI -- depends --> VM
-    UI -- depends --> PI
-    P -- depends --> VM
-    P -. implements .-> PI
+VM["ViewModel &lt;DS&gt;"]
+PI["Presenter &lt;I&gt;"]
+P["Presenter"]
+
+%% Relationships
+UI -- depends --> VM
+UI -- depends --> PI
+P -- depends --> VM
+P -. implements .-> PI
 
 classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
 class B1 boundary;
-
 ```
 
 </details>
@@ -766,8 +762,8 @@ a separate unit for it. The repository is a composite of the `gateway` and
 graph TD
 
 subgraph R1["Repository"]
-E["Entities"]
-G["Gateway"]
+  E["Entities"]
+  G["Gateway"]
 end
 
 ER["External Resource"]
@@ -813,9 +809,9 @@ prevents it.
 graph TD
 
 subgraph R1["Repository"]
-E["Entities"]
-G["Gateway"]
-GI["Gateway &lt;I&gt;"]
+  E["Entities"]
+  G["Gateway"]
+  GI["Gateway &lt;I&gt;"]
 end
 
 ER["External Resource"]
@@ -869,9 +865,9 @@ particular driver. What is shared is the core: `use case`, `entities` and
 graph TD
 
 subgraph D1["Driver"]
-UI["User Interface"]
-PI["Presenter &lt;I&gt;"]
-CI["Controller &lt;I&gt;"]
+  UI["User Interface"]
+  PI["Presenter &lt;I&gt;"]
+  CI["Controller &lt;I&gt;"]
 end
 
 G["Gateway"]
@@ -926,10 +922,9 @@ leaving through its gateway belong to the same socket.
 ```mermaid
 graph TD
 
-
 subgraph D1["Driver"]
-WSL["WS Listener"]
-CI["Controller &lt;I&gt;"]
+  WSL["WS Listener"]
+  CI["Controller &lt;I&gt;"]
 end
 
 UI["User Interface"]
@@ -982,35 +977,33 @@ gateways.
   <summary>mermaid</summary>
 
 ```mermaid
-
 graph TD
 
 subgraph B1["Boundary"]
-    GI["Gateway &lt;I&gt;"]
+  GI["Gateway &lt;I&gt;"]
 end
-    G["Gateway (adapt. logic)"]
-    ER["External Resource"]
+G["Gateway (adapt. logic)"]
+ER["External Resource"]
 
 subgraph B2["Boundary"]
-    GAPI["General Purpose Server-side API"]
+  GAPI["General Purpose Server-side API"]
 end
 
-    G -. implements .-> GI
-    G -- depends --> ER
-    ER -- depends --> GAPI
+G -. implements .-> GI
+G -- depends --> ER
+ER -- depends --> GAPI
 
 %% high-level relations
-    RCC["Reactive client"]
+RCC["Reactive client"]
 
 subgraph B3["Boundary"]
-    CGAPI["General Purpose Serve-side API"]
+  CGAPI["General Purpose Serve-side API"]
 end
 
-    RCC -- depends --> CGAPI
+RCC -- depends --> CGAPI
 
 classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
 class B1,B2,B3 boundary;
-
 ```
 
 </details>
@@ -1028,41 +1021,39 @@ the data.
   <summary>mermaid</summary>
 
 ```mermaid
-
 graph TD
 
 subgraph B1["Boundary"]
-    GI["Gateway &lt;I&gt;"]
+  GI["Gateway &lt;I&gt;"]
 end
-    G["Gateway"]
-    ER["External Resource"]
+G["Gateway"]
+ER["External Resource"]
 
 subgraph B2["Boundary"]
-    BFF["BFF (adapt. logic)"]
-    GAPI["General Purpose Server-side API"]
+  BFF["BFF (adapt. logic)"]
+  GAPI["General Purpose Server-side API"]
 end
 
-    G -. implements .-> GI
-    G -- depends --> ER
-    ER -- depends --> BFF
-    BFF -- depends --> GAPI
+G -. implements .-> GI
+G -- depends --> ER
+ER -- depends --> BFF
+BFF -- depends --> GAPI
 
 %% high-level relations
 subgraph RCC["Reactive client"]
-    CGI["Gateway &lt;I&gt;"]
+  CGI["Gateway &lt;I&gt;"]
 end
 
 subgraph B3["Boundary"]
-    CBFF["Reactive Client BFF"]
-    CGAPI["General Purpose Serve-side API"]
+  CBFF["Reactive Client BFF"]
+  CGAPI["General Purpose Serve-side API"]
 end
 
-    CBFF -. implements .-> CGI
-    CBFF -- depends --> CGAPI
+CBFF -. implements .-> CGI
+CBFF -- depends --> CGAPI
 
 classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
 class B1,B2,B3 boundary;
-
 ```
 
 </details>
