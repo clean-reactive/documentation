@@ -611,7 +611,7 @@ class B1,B2,B3 boundary;
 
 Architecture of the core (library):
 
-![clean-reactive-architecture](images/ca-non-reactive.png)
+![clean-reactive-architecture](images/ca-non-reactive.svg)
 
 <details>
   <summary>mermaid</summary>
