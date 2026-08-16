@@ -39,9 +39,9 @@ end
 
 P["Presenter"]
 C["Controller"]
-PI["Presenter &lt;I&gt;"]
-CI["Controller &lt;I&gt;"]
-GI["Gateway &lt;I&gt;"]
+PI["Presenter < I >"]
+CI["Controller < I >"]
+GI["Gateway < I >"]
 UC["Use Case Interactor"]
 
 %% implementation relation
@@ -149,14 +149,14 @@ graph TD
 subgraph B1["Boundary"]
   C["Controller"]
   P["Presenter"]
-  VM["View Model &lt;DS&gt;"]
+  VM["View Model < DS >"]
 end
 
-ID["Input Data &lt;DS&gt;"]
-IB["Input Boundary &lt;I&gt;"]
+ID["Input Data < DS >"]
+IB["Input Boundary < I >"]
 
-OD["Output Data &lt;DS&gt;"]
-OB["Output Boundary &lt;I&gt;"]
+OD["Output Data < DS >"]
+OB["Output Boundary < I >"]
 
 subgraph B2["Boundary"]
   V["View"]
@@ -164,7 +164,7 @@ end
 
 UC["Use Case Interactor"]
 
-DAI["Data Access Interface &lt;I&gt;"]
+DAI["Data Access Interface < I >"]
 
 subgraph B3["Boundary"]
   DA["Data Access"]
@@ -263,9 +263,9 @@ subgraph CRA["The Clean Reactive Architecture UML Diagram"]
 
   P["Presenter"]
   C["Controller"]
-  PI["Presenter &lt;I&gt;"]
-  CI["Controller &lt;I&gt;"]
-  GI["Gateway &lt;I&gt;"]
+  PI["Presenter < I >"]
+  CI["Controller < I >"]
+  GI["Gateway < I >"]
   UC["Use Case Interactor"]
 
   %% implementation relation
@@ -361,14 +361,14 @@ Unidirectional flow of control and data is the following:
 graph TD
 
 G["Gateway"]
-GI["Gateway &lt;I&gt;"]
+GI["Gateway < I >"]
 ER["External Resource"]
 UI["User Interface"]
 E["Entities"]
 P["Presenter"]
 C["Controller"]
-PI["Presenter &lt;I&gt;"]
-CI["Controller &lt;I&gt;"]
+PI["Presenter < I >"]
+CI["Controller < I >"]
 UC["Use Case Interactor"]
 
 %% implementation relation
@@ -476,9 +476,9 @@ end
 
 P["Presenter"]
 C["Controller"]
-PI["Presenter &lt;I&gt;"]
-CI["Controller &lt;I&gt;"]
-GI["Gateway &lt;I&gt;"]
+PI["Presenter < I >"]
+CI["Controller < I >"]
+GI["Gateway < I >"]
 UC["Use Case Interactor"]
 SE["Selector"]
 TR["Transaction"]
@@ -584,9 +584,9 @@ end
 
 P["Presenter"]
 C["Controller"]
-PI["Presenter &lt;I&gt;"]
-CI["Controller &lt;I&gt;"]
-GI["Gateway &lt;I&gt;"]
+PI["Presenter < I >"]
+CI["Controller < I >"]
+GI["Gateway < I >"]
 UC["Use Case Interactor"]
 
 %% implementation relation
@@ -622,14 +622,14 @@ graph TD
 subgraph B1["Boundary"]
   C["Controller"]
   P["Presenter"]
-  VM["View Model &lt;DS&gt;"]
+  VM["View Model < DS >"]
 end
 
-ID["Input Data &lt;DS&gt;"]
-IB["Input Boundary &lt;I&gt;"]
+ID["Input Data < DS >"]
+IB["Input Boundary < I >"]
 
-OD["Output Data &lt;DS&gt;"]
-OB["Output Boundary &lt;I&gt;"]
+OD["Output Data < DS >"]
+OB["Output Boundary < I >"]
 
 subgraph B2["Boundary"]
   V["View"]
@@ -637,7 +637,7 @@ end
 
 UC["Use Case Interactor"]
 
-DAI["Data Access Interface &lt;I&gt;"]
+DAI["Data Access Interface < I >"]
 
 subgraph B3["Boundary"]
   DA["Data Access"]
@@ -704,8 +704,8 @@ subgraph B1["Boundary"]
   UI["User Interface"]
 end
 
-VM["ViewModel &lt;DS&gt;"]
-PI["Presenter &lt;I&gt;"]
+VM["ViewModel < DS >"]
+PI["Presenter < I >"]
 P["Presenter"]
 
 %% Relationships
@@ -770,9 +770,9 @@ ER["External Resource"]
 UI["User Interface"]
 P["Presenter"]
 C["Controller"]
-PI["Presenter &lt;I&gt;"]
-CI["Controller &lt;I&gt;"]
-GI["Gateway &lt;I&gt;"]
+PI["Presenter < I >"]
+CI["Controller < I >"]
+GI["Gateway < I >"]
 UC["Use Case Interactor"]
 
 %% implementation relation
@@ -811,15 +811,15 @@ graph TD
 subgraph R1["Repository"]
   E["Entities"]
   G["Gateway"]
-  GI["Gateway &lt;I&gt;"]
+  GI["Gateway < I >"]
 end
 
 ER["External Resource"]
 UI["User Interface"]
 P["Presenter"]
 C["Controller"]
-PI["Presenter &lt;I&gt;"]
-CI["Controller &lt;I&gt;"]
+PI["Presenter < I >"]
+CI["Controller < I >"]
 UC["Use Case Interactor"]
 
 %% implementation relation
@@ -866,8 +866,8 @@ graph TD
 
 subgraph D1["Driver"]
   UI["User Interface"]
-  PI["Presenter &lt;I&gt;"]
-  CI["Controller &lt;I&gt;"]
+  PI["Presenter < I >"]
+  CI["Controller < I >"]
 end
 
 G["Gateway"]
@@ -875,7 +875,7 @@ ER["External Resource"]
 E["Entities"]
 P["Presenter"]
 C["Controller"]
-GI["Gateway &lt;I&gt;"]
+GI["Gateway < I >"]
 UC["Use Case Interactor"]
 
 %% implementation relation
@@ -924,17 +924,17 @@ graph TD
 
 subgraph D1["Driver"]
   WSL["WS Listener"]
-  CI["Controller &lt;I&gt;"]
+  CI["Controller < I >"]
 end
 
 UI["User Interface"]
-PI["Presenter &lt;I&gt;"]
+PI["Presenter < I >"]
 G["Gateway"]
 ER["External Resource"]
 E["Entities"]
 P["Presenter"]
 C["Controller"]
-GI["Gateway &lt;I&gt;"]
+GI["Gateway < I >"]
 UC["Use Case Interactor"]
 WST["WS Transmitter"]
 
@@ -980,7 +980,7 @@ gateways.
 graph TD
 
 subgraph B1["Boundary"]
-  GI["Gateway &lt;I&gt;"]
+  GI["Gateway < I >"]
 end
 G["Gateway (adapt. logic)"]
 ER["External Resource"]
@@ -1024,7 +1024,7 @@ the data.
 graph TD
 
 subgraph B1["Boundary"]
-  GI["Gateway &lt;I&gt;"]
+  GI["Gateway < I >"]
 end
 G["Gateway"]
 ER["External Resource"]
@@ -1041,7 +1041,7 @@ BFF -- depends --> GAPI
 
 %% high-level relations
 subgraph RCC["Reactive client"]
-  CGI["Gateway &lt;I&gt;"]
+  CGI["Gateway < I >"]
 end
 
 subgraph B3["Boundary"]
