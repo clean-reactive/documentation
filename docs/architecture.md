@@ -536,7 +536,7 @@ shared across multiple reactive and non-reactive clients.
 Such a core (library) will know nothing about any client. It will have its own
 API and, for example, its own mechanism for storing data. The most practial
 thing here is that the core (library) can be built following the same Clean
-Architecture concept but outlined with the classical, non-reactive UML diagram
+Architecture concept but outlined with the request-response UML diagram
 \- so one concept covers two different types of applications.
 
 High level architecture:
@@ -611,7 +611,7 @@ class B1,B2,B3 boundary;
 
 Architecture of the core (library):
 
-![clean-reactive-architecture](images/ca-non-reactive.svg)
+![clean-architecture-request-response](images/ca-request-response.svg)
 
 <details>
   <summary>mermaid</summary>
