@@ -1,17 +1,15 @@
 # Architecture
 
 Clean Reactive Architecture is an implementation of the [Clean Architecture
-concept](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html).
+concept](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+for reactive applications, built around the observer pattern.
 
-The Clean Architecture concept remains the primary source of truth. This
-document does not redefine its principles, instead, it provides concrete
-guidance for areas where the original concept is abstract or
-implementation-agnostic.
+The Clean Architecture concept is outlined with the following circle diagram:
 
-Unless explicitly stated otherwise, engineers and developers should rely on
-the principles of Clean Architecture when making architectural decisions.
+![clean-architecture](images/ca-circle-diagram.jpg)
 
-Clean Reactive Architecture is outlined with the following UML diagram:
+The implementation of the concept for reactive applications is outlined with
+the following UML diagram:
 
 ![clean-reactive-architecture](images/clean-reactive-architecture.svg)
 
@@ -101,6 +99,13 @@ class B1,B2,B3 boundary;
   represented as an object structure.
 - **Valid State**: One of a finite number of states considered valid according
   to the enterprise and application business rules.
+
+> NOTE: The Clean Architecture concept remains the primary source of truth. This
+> document does not redefine its principles, instead, it provides concrete
+> guidance for areas where the original concept is abstract or
+> implementation-agnostic. Unless explicitly stated otherwise, engineers and
+> developers should rely on the principles of Clean Architecture when making
+> architectural decisions.
 
 See also:
 
