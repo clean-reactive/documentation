@@ -410,41 +410,91 @@ reads. There is no single unit (hub) which sits on both paths.
 </details>
 
 <details>
-  <summary><b>Are the SOLID principles followed?</b></summary>
+  <summary><b>Where do the SOLID principles fit?</b></summary>
 
-Clean Reactive Architecture follows the SOLID principles.
+For Clean Reactive Architecture SOLID was a generative lens, not a governing
+law. The UML diagram was derived by asking: "If we apply Clean Architecture to
+reactive apps, what units do we actually need, and how do they interact?" SOLID
+helped think through that derivation. But once the UML diagram existed, it
+became the primary specification. SOLID didn't need to be enforced anymore
+because the diagram's structure already encoded it. Some principles still guide
+development, but not as rules the codebase is audited against.
 
-1. *The single-responsibility principle (SRP)*. Each unit of the
-   architecture has its own and only one well-defined responsibility.
+1. *The single-responsibility principle (SRP)* - structural, not aspirational.
 
-2. *The open–closed principle (OCP)*. The principle is preserved by explicitly
-   declared `presenter<I>`, `controller<I>` and `gateway<I>` interfaces. For
-   example, the `user interface` unit is considered closed once its
-   `presenter<I>` and `controller<I>` interfaces are declared - rest
-   implementation depends on the declared interfaces, not the `user interface`
-   unit implementation. At the same time it remains open for extension
-   (composition): it can be rendered with other `user interface` units by
-   utilizing mocks through the LSP.
+   Each unit of the architecture has its own and only one well-defined
+   responsibility, and the diagram enforces it through reachability rather than
+   through discipline. The `presenter` only reads `entities` and projects them
+   for the `user interface`, the `controller` only converts user input into a
+   `use case` call. The two are never connected, and no unit sits on both paths,
+   so a unit cannot quietly acquire a second responsibility - there is no path
+   along which it could.
 
-3. *Liskov substitution principle (LSP)*. The principle is preserved by
-   explicitly declared `presenter<I>`, `controller<I>` and `gateway<I>`
-   interfaces. For example, through the `gateway<I>` interface, different gateway
-   implementations can be provided, which may represent a remote or a local
-   resource.
+   This is what the separation buys concretely: a decision on the write path can
+   never be made from data prepared for display.
 
-4. *Interface segregation principle (ISP)*. The principle is preserved by
-   explicitly declared `presenter<I>`, `controller<I>` and `gateway<I>`
-   interfaces. A thick interface can signal the need to split a unit into parts,
-   and the interfaces can also be used to understand and define those parts.
-   For example, a thick `presenter<I>` can signal that the `user interface`
-   unit should be split, and the segments of that interface suggest where the
-   split may happen.
+2. *The open–closed principle (OCP)* - a completion milestone.
 
-5. *Dependency inversion principle (DIP)*. The principle is preserved by
-   explicitly declared `gateway<I>` interfaces. Units from inner layers do not
-   depend on concrete implementations of units from outer layers, instead they
-   depend on abstractions. For example, the `use case` unit (inner layer) depends
-   on the `gateway` unit (outer layer) through the `gateway<I>` interface.
+   In B. Meyer's original formulation a unit is closed once its public interface
+   is declared. In the [outside-in flow](methodology.md#outside-in-development)
+   the `user interface` layout is built first, and `presenter<I>` and
+   `controller<I>` are extracted from what that layout actually consumes. At
+   this point the `user interface` unit is closed: everything downstream depends
+   on the declared interfaces, not on the layout implementation. The unit can be
+   handed off, and the remaining units can be built in parallel against the
+   declared contract.
+
+   At the same time it remains open for extension (composition): the same layout
+   can be composed into other screens, or rendered against other implementations
+   of its interfaces - mocks, fixtures, another driver - through the LSP.
+
+   Practically, OCP is used here as a milestone in the development flow, a point
+   at which a unit is done and work can move on. It is not a mandate to design
+   extension points for hypothetical future requirements.
+
+3. *Liskov substitution principle (LSP)* - substitution as a working tool.
+
+   Explicitly declared `presenter<I>`, `controller<I>` and `gateway<I>`
+   interfaces make implementations behind them interchangeable for their
+   consumers. For example, a local in-memory `gateway` and a remote one both
+   satisfy the same `gateway<I>`, and neither the `use case`, nor the
+   `presenter`, nor the `user interface` changes when one replaces the other.
+
+   This is what makes it possible to develop and demo the application without a
+   backend, to run integration tests that never touch the network, to vary
+   behavior per environment, and to render the `user interface` against a mock
+   `presenter`.
+
+4. *Interface segregation principle (ISP)* - a decomposition signal.
+
+   The `user interface` unit is [implemented top-down](methodology.md#outside-in-development):
+   one large layout that covers the feature's requirements is decomposed into
+   smaller parts. The extracted interfaces support that decomposition. A thick
+   `presenter<I>` is a signal that the `user interface` unit carries too much
+   and should be split, and the segments of that interface suggest where the
+   split may happen - each smaller part then gets its own, thinner interface.
+   The same reading applies to a thick `controller<I>` or `gateway<I>`.
+
+   ISP is applied here at [refactoring time](methodology.md#continuous-refactoring),
+   on an interface extracted from a concrete consumer. It is not a reason to
+   design small interfaces upfront.
+
+5. *Dependency inversion principle (DIP)* - the structural one.
+
+   This is the principle the diagram actually rests on, rather than merely
+   agrees with. Units from inner layers do not depend on concrete
+   implementations of units from outer layers, they depend on abstractions. The
+   `use case` unit (inner layer) depends on the `gateway` unit (outer layer)
+   through the `gateway<I>` interface, and the `user interface` unit depends on
+   `presenter<I>` and `controller<I>` rather than on their implementations.
+   Remove this and the layers collapse into a graph of concrete imports - the
+   boundaries on the diagram exist because of it.
+
+See also:
+
+B. Meyer. (1997). [Object-Oriented Software Construction](https://www.amazon.com/Object-Oriented-Software-Construction-Book-CD-ROM/dp/0136291554)
+
+Robert C. Martin. [The Principles of OOD](http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod)
 
 </details>
 
@@ -802,8 +852,8 @@ class R1 repository;
 
 Some implementations let the repository absorb the `gateway<I>` interface -
 which is acceptable, except the case where the repository defines the contract
-rather than consume it. This is not desired, and the development methodology
-prevents it.
+rather than consume it. This is not desired, and the [development
+methodology](methodology.md#outside-in-development) prevents it.
 
 ![clean-reactive-architecture-repository-with-gateway-interface](images/clean-reactive-architecture-repository-with-gateway-interface.png)
 
@@ -855,11 +905,13 @@ class R1 repository;
 The `user interface` is not a privileged unit, it is a detail. Clean Reactive
 Architecture treats the `user interface` as one driver among several.
 
-A **driver** exercises the core: it provides input through controllers and
-observes the core's changes through presenters. Normally each driver has its
-_own controller and presenter implementations_, which are specific to a
-particular driver. What is shared is the core: `use case`, `entities` and
-`gateway<I>` that every driver's controllers and presenters meet.
+> **Driver** - a unit that exercises the core: it provides input through a
+> controller, observes the core's state through a presenter, or both.
+
+Normally each driver has its _own controller and presenter implementations_,
+which are specific to a particular driver. What is shared is the core:
+`use case`, `entities` and `gateway<I>` that every driver's controllers and
+presenters meet.
 
 ![clean-reactive-architecture-driver-user-interface](images/clean-reactive-architecture-driver-user-interface.png)
 
