@@ -161,7 +161,7 @@ self-contained, composable widget. Features in turn are composed into
 route-driven pages.
 
 Either works. Whichever is chosen, the units carry their role and
-responsobility. It is a good idea to name the files holding them with explicit
+responsibility. It is a good idea to name the files holding them with explicit
 suffixes (`UseCase`, `Presenter`, `Repository`, etc.), so each file's purpose
 is clear regardless of where it sits.
 

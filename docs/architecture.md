@@ -1132,7 +1132,7 @@ S. Newman. [Pattern: Backends For Frontends](https://samnewman.io/patterns/archi
 <details>
   <summary><b>How does it map to the testing pyramid?</b></summary>
 
-Clear Reactive Architecture maps cleanly onto the testing pyramid.
+Clean Reactive Architecture maps cleanly onto the testing pyramid.
 
 ![testing-pyramid](images/testing-pyramid.png)
 
