@@ -57,6 +57,17 @@ the codebase to evolve naturally into a fully decomposed, structured form.
 Any feature can be built quickly from scratch, or by copy/pasting bits and
 units from other features, with later generalization of commonalities.
 
+The samples illustrate this. The [one-file sample](https://github.com/clean-reactive/sample-react-one-file)
+keeps every unit inlined in a single component, with each unit marked by a
+comment - the shape a feature starts in. The
+[React](https://github.com/clean-reactive/sample-react-rtk) and
+[Angular](https://github.com/clean-reactive/sample-angular-tanstack-query)
+samples are *partially* decomposed: some units have their own files, others
+remain inlined in the component that uses them. That mix is not an unfinished
+state. It is what a codebase looks like when extraction follows need rather than
+symmetry, and it is where a feature sits for most of its life. Full
+decomposition of every unit is a possible outcome, not the goal.
+
 See also:
 
 B. Meyer [The new culture of Software Development: Reflections on the Practice
