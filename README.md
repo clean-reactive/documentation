@@ -14,11 +14,11 @@ decomposition.
 
 - [One-file React App](https://github.com/clean-reactive/sample-react-one-file) -
   every unit inlined in a single component. The easiest place to start reading.
-- [React App](https://github.com/clean-reactive/sample-react-rtk) - React and
+- [React App](https://github.com/clean-reactive/sample-react) - React and
   RTK Query, partially decomposed.
-- [Angular App](https://github.com/clean-reactive/sample-angular-tanstack-query) -
+- [Angular App](https://github.com/clean-reactive/sample-angular) -
   Angular and TanStack Query, partially decomposed.
-- [Next.js App](https://github.com/clean-reactive/sample-react-nextjs) -
+- [Next.js App](https://github.com/clean-reactive/sample-nextjs-react) -
   full-stack, covering both the client and the server.
 
 *Partially* decomposed is deliberate. Some units have their own files, others
