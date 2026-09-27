@@ -720,7 +720,7 @@ large codebase.
   the entities without modifying them.
 - **Transaction**: Unit that transitions entities between two valid states,
   ensuring business rules are maintained.
-- **Effect**: Unit that manages data flows to, from, and across gateways
+- **Effect**: Unit that manages I/O data flows to, from, and across gateways
   (sequential, parallel, etc.) and derives data structures from them.
 
 </details>
