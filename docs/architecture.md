@@ -480,7 +480,7 @@ class B1,B2,B3 boundary;
 The conventional Composition Root pattern places this responsibility near the
 application's entry point.
 
-In a client application based on the observable pattern, we consider entry points
+In a client application based on the observer pattern, we consider entry points
 at two scopes:
 
 - **Bootstrap entry point:** invoked by the host to start the application
@@ -733,7 +733,7 @@ Architecture, so they can be extracted into a separate core (library) to be
 shared across multiple reactive and non-reactive clients.
 
 Such a core (library) will know nothing about any client. It will have its own
-API and, for example, its own mechanism for storing data. The most practial
+API and, for example, its own mechanism for storing data. The most practical
 thing here is that the core (library) can be built following the same Clean
 Architecture concept but outlined with the request-response UML diagram
 \- so one concept covers two different types of applications.
@@ -927,19 +927,19 @@ It is important to note that every property of a presenter returns its own
 ViewModel. Let's look at an example:
 
 ```ts
-interface BooksByAuthor {
+interface BookItem {
    authorName: string;
    bookTitle: string;
 }
 
 interface UserBooksPresenter {
    userName: string;
-   books: BooksByAuthor[];
+   books: BookItem[];
 }
 ```
 
 Here `userName` and `books` are properties of the `UserBooksPresenter`
-interface, each property return own ViewModel - `userName` a primitive value,
+interface, each property returns its own ViewModel - `userName` a primitive value,
 `books` a structured one.
 
 </details>
@@ -1198,7 +1198,7 @@ ER -- depends --> GAPI
 RCC["Reactive client"]
 
 subgraph B3["Boundary"]
-  CGAPI["General Purpose Serve-side API"]
+  CGAPI["General Purpose Server-side API"]
 end
 
 RCC -- depends --> CGAPI
@@ -1247,7 +1247,7 @@ end
 
 subgraph B3["Boundary"]
   CBFF["Reactive Client BFF"]
-  CGAPI["General Purpose Serve-side API"]
+  CGAPI["General Purpose Server-side API"]
 end
 
 CBFF -. implements .-> CGI

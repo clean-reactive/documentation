@@ -120,7 +120,7 @@ another on the `external resource` - neither needs anything from the other. A
 third can focus on the core using the `presenter<I>` and `controller<I>`, and
 a fourth bringing it all together by implementing the `gateway`.
 
-Worth to mentions, that not every feature includes every step. A read-only
+It is worth mentioning that not every feature includes every step. A read-only
 feature has no `controller` or `use case`, a single-operation feature may
 invoke `gateway` directly. The flow lists the full sequence, every feature
 uses the steps it needs.
