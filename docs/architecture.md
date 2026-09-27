@@ -410,6 +410,150 @@ reads. There is no single unit (hub) which sits on both paths.
 </details>
 
 <details>
+  <summary><b>Where is a composition root?</b></summary>
+
+A composition root is a location in an application where units are assembled
+and wired into an object graph according to the dependency relationships defined
+by the architecture.
+
+![clean-reactive-architecture-composition-root](images/clean-reactive-architecture-composition-root.png)
+
+<details>
+  <summary>mermaid</summary>
+
+```mermaid
+graph TD
+
+CR["Composition Root"]
+classDef composition fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
+class CR composition;
+
+%% assembly relation
+CR -. assembles .-> UI
+CR -. assembles .-> P
+CR -. assembles .-> C
+CR -. assembles .-> UC
+CR -. assembles .-> E
+CR -. assembles .-> G
+CR -. assembles .-> ER
+
+subgraph B1["Boundary"]
+  G["Gateway"]
+  ER["External Resource"]
+end
+
+subgraph B2["Boundary"]
+  UI["User Interface"]
+end
+
+subgraph B3["Boundary"]
+  E["Entities"]
+end
+
+P["Presenter"]
+C["Controller"]
+PI["Presenter < I >"]
+CI["Controller < I >"]
+GI["Gateway < I >"]
+UC["Use Case Interactor"]
+
+%% implementation relation
+P -. implements .-> PI
+C -. implements .-> CI
+G -. implements .-> GI
+
+%% dependency relation
+UI -- depends --> PI
+UI -- depends --> CI
+C -- depends --> UC
+P -- depends --> E
+UC -- depends --> E
+UC -- depends --> GI
+G -- depends --> ER
+
+classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
+class B1,B2,B3 boundary;
+```
+
+</details>
+
+The conventional Composition Root pattern places this responsibility near the
+application's entry point.
+
+In a client application based on the observable pattern, we consider entry points
+at two scopes:
+
+- **Bootstrap entry point:** invoked by the host to start the application
+  and activate its root component or components.
+- **Component entry point:** used to activate a component, such as a page,
+  screen, or child component, through its contract. It provides entry into that
+  component's local system, which commonly combines state, event handlers,
+  data access, user interface declarations, etc.
+
+```text
+main                 Bootstrap entry point
+└── App              Component entry point
+    └── Orders       Component entry point
+        └── Order    Component entry point
+```
+
+Here, we apply the composition principle recursively at these entry boundaries
+and distinguish two composition-root roles by their scope:
+
+- **Bootstrap composition root** is where application dependencies are assembled
+  and the application is connected to its host lifecycle, arranging the
+  activation of one or more components.
+- **Component composition root** is where a component's units, including its
+  User Interface unit, are assembled and wired together. Units may be created
+  locally or supplied as dependencies.
+
+"Root" is relative to the system of units being composed. The hierarchy below
+identifies these composition scopes; units may be shared across them.
+
+```text
+main                 Bootstrap composition root
+└── App              Component composition root
+    └── Orders       Component composition root
+        └── Order    Component composition root
+```
+
+A component defines a contract for the inputs and dependencies it requires.
+These requirements include both explicit inputs and dependencies supplied by the
+surrounding environment. When they are satisfied, the component can assemble and
+wire its units to deliver behavior to its client (e.g. user).  Another parent or
+a test harness can activate it by satisfying the same requirements.
+
+Its composition may include the user interface, entities, presenters,
+controllers, use cases, gateways, and external resources. A composition root is
+an implementation responsibility, not an additional architectural unit.  Units
+keep their architectural responsibilities even when their code is inlined in the
+class or function serving as the composition root.
+
+Composition includes wiring units that already exist. For example, connecting
+supplied presenter values and controller callbacks to the User Interface unit is
+composition, even when no presenter or controller is constructed locally.
+
+Composition uses the host's lifecycle mechanisms to initialize, retain, reuse,
+and release units according to their intended lifetimes. It can unfold as
+components are activated. The mechanisms used to realize this are implementation
+choices.
+
+The composition-root hierarchy is recursive and fractal: each component entry
+point can lead to a further composition with its own units and entry points.  A
+parent's User Interface unit typically declares or invokes a child component's
+entry point, activating that child's composition.
+
+Bootstrap composition can span several entry points. The model does not imply
+any specific file or folder structure.
+
+See also:
+
+Mark Seemann. (2011). [Composition Root](https://blog.ploeh.dk/2011/07/28/CompositionRoot/)
+
+</details>
+
+
+<details>
   <summary><b>Where do the SOLID principles fit?</b></summary>
 
 For Clean Reactive Architecture SOLID was a generative lens, not a governing
