@@ -520,12 +520,12 @@ main                 Bootstrap composition root
 A component defines a contract for the inputs and dependencies it requires.
 These requirements include both explicit inputs and dependencies supplied by the
 surrounding environment. When they are satisfied, the component can assemble and
-wire its units to deliver behavior to its client (e.g. user).  Another parent or
+wire its units to deliver behavior to its client (e.g. user). Another parent or
 a test harness can activate it by satisfying the same requirements.
 
 Its composition may include the user interface, entities, presenters,
 controllers, use cases, gateways, and external resources. A composition root is
-an implementation responsibility, not an additional architectural unit.  Units
+an implementation responsibility, not an additional architectural unit. Units
 keep their architectural responsibilities even when their code is inlined in the
 class or function serving as the composition root.
 
@@ -535,11 +535,15 @@ composition, even when no presenter or controller is constructed locally.
 
 Composition uses the host's lifecycle mechanisms to initialize, retain, reuse,
 and release units according to their intended lifetimes. It can unfold as
-components are activated. The mechanisms used to realize this are implementation
+components are activated. A unit's lifetime reflects the part of the application
+it serves: it is usually tied to the composition that owns it, and units several
+components rely on are owned higher in the hierarchy. The tie is not absolute -
+a pending call can keep a use case alive after its composition is released,
+until the call resolves. The mechanisms used to realize this are implementation
 choices.
 
 The composition-root hierarchy is recursive and fractal: each component entry
-point can lead to a further composition with its own units and entry points.  A
+point can lead to a further composition with its own units and entry points. A
 parent's User Interface unit typically declares or invokes a child component's
 entry point, activating that child's composition.
 
