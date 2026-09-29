@@ -18,27 +18,27 @@ fetches data, holds state, applies rules, formats values for display, handles
 clicks and renders the result. While the feature is small, this is fine. As it
 grows, the responsibilities tangle: a formatting change breaks a rule, a rule
 is duplicated in three event handlers, and switching the backend means touching
-the rendering code. Underneath is a missing map: nothing says where one
-responsibility ends and the next begins, so there is no obvious way to group
-lines of code into meaningful, reusable parts.
+the rendering code. Nothing clearly says where one responsibility ends and the
+next begins, so there is no reliable way to decompose the component into clean,
+reusable parts.
 
 Clean Reactive Architecture gives each of these responsibilities a name - a
-*unit* - and defines which unit may depend on which. That is all it defines. It
-does not tell you to split files, create classes, or add a library.
+*unit* - and defines which unit may depend on which. It does not tell you to
+split files, create classes, or add a library.
 
 ## Units in plain words
 
 Each unit owns one responsibility.
 
-| Unit                  | Responsible for                                          | In the counter                         |
-| --------------------- | -------------------------------------------------------- | -------------------------------------- |
-| `user interface`      | showing things to the user and letting them act          | the JSX with the value and two buttons |
-| `presenter`           | deciding what to show                                    | `countStatus` - "Positive", "Zero"     |
-| `controller`          | catching what the user did                               | `onIncrementButtonClick`               |
-| `use case interactor` | doing what the user asked for                            | call the resource, then update `count` |
-| `entities`            | keeping what is true, and keeping it right               | `count`                                |
-| `gateway`             | translating to and from the outside world                | the in-memory and `fetch` branches     |
-| `external resource`   | representing outside the app - servers, storage, devices | the in-memory counter, `/api/counter`  |
+| Unit                  | Responsible for                                                  | In the counter                         |
+| --------------------- | ---------------------------------------------------------------- | -------------------------------------- |
+| `user interface`      | showing static and interactive things to the user                | the JSX with the value and two buttons |
+| `presenter`           | deciding what to show                                            | `countStatus` - "Positive", "Zero"     |
+| `controller`          | catching what the user did                                       | `onIncrementButtonClick`               |
+| `use case interactor` | doing what the user asked for                                    | ask the gateway, then update `count`   |
+| `entities`            | keeping what is true, and keeping it right                       | `count`                                |
+| `gateway`             | translating to and from the outside world                        | the in-memory and `fetch` branches     |
+| `external resource`   | representing what is outside the app - servers, storage, devices | the in-memory counter, `/api/counter`  |
 
 Two more words appear on the diagram:
 
@@ -46,15 +46,12 @@ Two more words appear on the diagram:
   `gateway<I>` are declared by the unit that *uses* them, not by the unit that
   implements them. An interface does not have to be a language `interface`; a
   type of a value is enough.
-- A **boundary** is a line data crosses as plain values - primitives, plain
-  objects, DTOs - never as behavior.
+- A **boundary** is a line data crosses only as primitive data types or data
+  structures - for example DTOs or plain objects.
 
 ## The diagram
 
 ![clean-reactive-architecture](images/clean-reactive-architecture.svg)
-
-The *double lines* represent boundaries, which data crosses as primitive data
-types or data structures.
 
 <details>
   <summary>mermaid</summary>
@@ -62,21 +59,32 @@ types or data structures.
 ```mermaid
 graph TD
 
-UI["User Interface"]
-PI["Presenter < I >"]
-CI["Controller < I >"]
+subgraph B1["Boundary"]
+  G["Gateway"]
+  ER["External Resource"]
+end
+
+subgraph B2["Boundary"]
+  UI["User Interface"]
+end
+
+subgraph B3["Boundary"]
+  E["Entities"]
+end
+
 P["Presenter"]
 C["Controller"]
-UC["Use Case Interactor"]
-E["Entities"]
+PI["Presenter < I >"]
+CI["Controller < I >"]
 GI["Gateway < I >"]
-G["Gateway"]
-ER["External Resource"]
+UC["Use Case Interactor"]
 
+%% implementation relation
 P -. implements .-> PI
 C -. implements .-> CI
 G -. implements .-> GI
 
+%% dependency relation
 UI -- depends --> PI
 UI -- depends --> CI
 C -- depends --> UC
@@ -85,9 +93,14 @@ UC -- depends --> E
 UC -- depends --> GI
 GI -- depends --> E
 G -- depends --> ER
+
+classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
+class B1,B2,B3 boundary;
 ```
 
 </details>
+
+The *double lines* on the diagram are the boundaries.
 
 The diagram has two kinds of arrows, shown in its legend. An arrow with an open
 head means *depends* - read it as "knows about". An arrow with a hollow
@@ -129,8 +142,9 @@ const [count, setCount] = useState<number>(0);
 //#endregion entities unit
 ```
 
-The entity is built with a framework primitive, `useState`. That is allowed.
-What matters is that the state has one explicit place.
+The entity is built with a framework primitive, `useState`, and there is no
+reason to avoid it. What matters is that the state is visible, in one explicit
+place.
 
 **Presenter** - derives and composes what the screen needs from the entities:
 
@@ -161,7 +175,8 @@ const onIncrementButtonClick = async (): Promise<void> => {
     //#endregion in-memory gateway unit
   } else {
     //#region remote gateway unit
-    // fetch("/api/counter/increment") ...
+    // POST /api/counter/increment, then GET /api/counter ...
+    newCount = data.value;
     //#endregion remote gateway unit
   }
   //#region transaction unit
@@ -171,11 +186,15 @@ const onIncrementButtonClick = async (): Promise<void> => {
 };
 ```
 
-The `controller` receives the click. The `use case` asks a `gateway` for the
-new value and writes it into the entity. The `gateway interface` is just the
+The `controller` receives the click and delegates it to the `use case`. The
+`use case` asks a `gateway` for the new value and writes it into the entity. The `gateway interface` is just the
 type of `newCount` - the use case needs "a number back", and both gateways
 provide it. The final `setCount` is a *transaction*: it moves the entity from
 one valid state to another.
+
+`onDecrementButtonClick` has the same shape. A third controller handler,
+`onAppMount`, only reads the count: the `user interface` runs it once, from a
+`useEffect` lifecycle hook, when the component mounts.
 
 **User interface** - shows presenter values and calls controller handlers:
 
@@ -203,47 +222,73 @@ requirement arrives - not in advance. Here are two typical moments.
 
 The three use cases in `App.tsx` repeat the same `if (DEV) … else …`
 branching. That repetition is the signal. The contract is extracted from what
-the use cases already do - change the count, then read it back. Commands change
-it and return nothing; the query reads it:
+the use cases need - a number back after every call:
 
 ```tsx
 type CounterGateway = {
-  increment: () => Promise<void>;
-  decrement: () => Promise<void>;
+  increment: () => Promise<number>;
+  decrement: () => Promise<number>;
   getCount: () => Promise<number>;
 };
+```
 
+Both resources follow CQRS: a command (`increment`, `decrement`) changes the
+count and returns nothing, and a query (`getCount`) reads it. The contract does
+not copy that shape - it follows its consumer. Bridging the two is the
+`gateway`'s job: each command is followed by the query.
+
+```tsx
 const inMemoryCounterGateway: CounterGateway = {
-  increment: () => inMemoryCounterResource.increment(),
-  decrement: () => inMemoryCounterResource.decrement(),
+  increment: async () => {
+    await inMemoryCounterResource.increment();
+    return inMemoryCounterResource.getCount();
+  },
+  // decrement follows the same shape as increment
   getCount: () => inMemoryCounterResource.getCount(),
 };
 
 const remoteCounterGateway: CounterGateway = {
   increment: async () => {
-    const response = await fetch("/api/counter/increment", { method: "POST" });
-    if (!response.ok) throw new Error("Failed to increment count");
+    // command: change the count
+    const commandResponse = await fetch("/api/counter/increment", {
+      method: "POST",
+    });
+    if (!commandResponse.ok) {
+      throw new Error("Failed to increment count");
+    }
+
+    // query: read the new count
+    const queryResponse = await fetch("/api/counter");
+    if (!queryResponse.ok) {
+      throw new Error("Failed to fetch count");
+    }
+    const { value } = await queryResponse.json();
+    return value;
   },
+
+  // decrement follows the same shape as increment
+
   getCount: async () => {
     const response = await fetch("/api/counter");
-    if (!response.ok) throw new Error("Failed to read count");
-    return (await response.json()).value;
+    if (!response.ok) {
+      throw new Error("Failed to fetch count");
+    }
+    const { value } = await response.json();
+    return value;
   },
-  // decrement follows the same shape as increment
 };
 ```
 
 The composition root picks the implementation, and each use case shrinks:
 
 ```tsx
-const gateway = import.meta.env.DEV
+const gateway: CounterGateway = import.meta.env.DEV
   ? inMemoryCounterGateway
   : remoteCounterGateway;
 
 const onIncrementButtonClick = async (): Promise<void> => {
   //#region use case unit
-  await gateway.increment();
-  setCount(await gateway.getCount());
+  setCount(await gateway.increment());
   //#endregion use case unit
 };
 ```
@@ -304,9 +349,7 @@ const onIncrementButtonClick = async (): Promise<void> => {
   //#region use case unit
   setStatus({ kind: "loading" });
   try {
-    await gateway.increment();
-    const count = await gateway.getCount();
-    setCount(count);
+    setCount(await gateway.increment());
     setStatus({ kind: "idle" });
   } catch {
     setStatus({ kind: "error", message: "Could not increment" });
@@ -328,9 +371,10 @@ spend most of their life.
 
 ## Composition, briefly
 
-`App` is a *component composition root*: it assembles its units and wires them
-to its `user interface`. Every component does the same for itself, and `main`
-is the *bootstrap composition root* that starts the application.
+`App` is a *component composition root*: it assembles its units, including `user
+interface` unit, and wires them together. Every component does the same for
+itself, and `main` is the *bootstrap composition root* that starts the
+application.
 
 ```text
 main.tsx             Bootstrap composition root
@@ -342,8 +386,8 @@ is the composition root of its own units.
 
 A unit usually lives with the composition that owns it. When state must outlive
 a component - for example, shared by two screens - lift it to a composition
-root higher up. See [Where is a composition
-root?](architecture.md) in the architecture Q&A.
+root higher up. See *Where is a composition root?* in the [architecture
+Q&A](architecture.md#qa).
 
 ## Building your own feature
 
@@ -373,13 +417,15 @@ The details are in the [Development Methodology](methodology.md#outside-in-devel
 - **"I must design the interfaces first."** No. An interface is extracted from
   its consumer when the flow reaches it, so it contains exactly what is used.
 - **"Every feature needs every unit."** No. Use the units the feature needs.
-- **"Entities must be free of the framework."** Not here. Entities may be
-  built with the framework's reactive primitives - `useState`, signals,
-  notifiers, stores. What matters is that they have one explicit place.
+- **"Entities must be free of the framework."** No. Frameworks provide useful
+  reactive primitives - `useState`, signals, notifiers, stores - and avoiding
+  them only adds wrapper code. What matters is that entities are visible: their
+  data and rules sit in one explicit place, not spread thinly across components,
+  hooks and handlers. Clean boundaries, not mechanical independence from the
+  framework, are what make them portable.
 - **"The user interface is the center."** No. The `user interface` is one
-  *driver* among several. A test harness, a WebSocket listener, or a
-  component that shows a toast when loading fails drive the same core the
-  same way.
+  *driver* among several. A test harness, a WebSocket listener or a deep link
+  drives the same core - through a `controller`, a `presenter`, or both.
 
 ## Where to go next
 
@@ -392,7 +438,8 @@ The details are in the [Development Methodology](methodology.md#outside-in-devel
    tests.
 3. The [Next.js sample](https://github.com/clean-reactive/sample-nextjs-react) -
    a reactive client together with the server it talks to.
-4. [Architecture](architecture.md) - the full diagram, the extended units
-   (selector, transaction, effect) and the reasoning behind them.
+4. [Architecture](architecture.md) - where the diagram comes from, the
+   extended diagram with its additional units (selector, transaction, effect),
+   and the Q&A behind the design.
 5. [Development Methodology](methodology.md) - how features are built and
    evolved.
