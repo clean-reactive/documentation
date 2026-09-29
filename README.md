@@ -1,5 +1,8 @@
 # Clean Reactive Architecture Documentation
 
+- [Introduction](./docs/introduction.md) - the gentle way in: what the
+  architecture is for, its units in plain words, and a counter sample walked
+  through unit by unit.
 - [Architecture](./docs/architecture.md) - the UML diagram, the units, and the
   reasoning behind them.
 - [Development Methodology](./docs/methodology.md) - how features are built
