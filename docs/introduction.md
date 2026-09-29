@@ -2,9 +2,10 @@
 
 This guide is the gentle way in. It explains what Clean Reactive Architecture
 is for, names its units in plain words, and walks through the smallest sample,
-a counter, unit by unit. The guide then changes the counter twice - extracting
-a gateway from repeated code and adding an entity for a new requirement - to
-show how a feature evolves without being rewritten.
+[a counter](https://github.com/clean-reactive/sample-react-one-file), unit by
+unit. The guide then changes the counter twice - extracting a gateway from
+repeated code and adding an entity for a new requirement - to show how a
+feature evolves without being rewritten.
 
 You only need to have built a component in a reactive framework before - React,
 Angular, Vue, Flutter, SwiftUI or similar. The examples use React, but nothing
@@ -131,7 +132,7 @@ const [count, setCount] = useState<number>(0);
 The entity is built with a framework primitive, `useState`. That is allowed.
 What matters is that the state has one explicit place.
 
-**Presenter** - derives what the screen needs from the entities:
+**Presenter** - derives and composes what the screen needs from the entities:
 
 ```tsx
 //#region presenter unit
@@ -202,30 +203,33 @@ requirement arrives - not in advance. Here are two typical moments.
 
 The three use cases in `App.tsx` repeat the same `if (DEV) … else …`
 branching. That repetition is the signal. The contract is extracted from what
-the use cases already consume - a number back from each operation:
+the use cases already do - change the count, then read it back. Commands change
+it and return nothing; the query reads it:
 
 ```tsx
 type CounterGateway = {
-  increment: () => Promise<number>;
-  decrement: () => Promise<number>;
+  increment: () => Promise<void>;
+  decrement: () => Promise<void>;
   getCount: () => Promise<number>;
 };
 
 const inMemoryCounterGateway: CounterGateway = {
-  increment: async () => {
-    await inMemoryCounterResource.increment();
-    return inMemoryCounterResource.getCount();
-  },
-  // decrement and getCount follow the same shape
+  increment: () => inMemoryCounterResource.increment(),
+  decrement: () => inMemoryCounterResource.decrement(),
+  getCount: () => inMemoryCounterResource.getCount(),
 };
 
 const remoteCounterGateway: CounterGateway = {
   increment: async () => {
     const response = await fetch("/api/counter/increment", { method: "POST" });
     if (!response.ok) throw new Error("Failed to increment count");
+  },
+  getCount: async () => {
+    const response = await fetch("/api/counter");
+    if (!response.ok) throw new Error("Failed to read count");
     return (await response.json()).value;
   },
-  // decrement and getCount follow the same shape
+  // decrement follows the same shape as increment
 };
 ```
 
@@ -238,8 +242,8 @@ const gateway = import.meta.env.DEV
 
 const onIncrementButtonClick = async (): Promise<void> => {
   //#region use case unit
-  const newCount = await gateway.increment();
-  setCount(newCount);
+  await gateway.increment();
+  setCount(await gateway.getCount());
   //#endregion use case unit
 };
 ```
@@ -249,11 +253,28 @@ That is the payoff of the dependency arrows.
 
 ### A new requirement earns an entity
 
-Now the product asks for a busy indicator and an error message. That is new
-state with its own rules: an operation is `idle`, `loading` or failed, and an
-`idle` operation cannot carry an error message. State with rules is an entity
-- here an *application business entity*, because it exists only because this
-application talks to a remote resource.
+Now the product asks for a busy indicator and an error message. The work
+starts where the user sees it - the `user interface`:
+
+```tsx
+<button
+  onClick={onIncrementButtonClick}
+  disabled={isIncrementButtonDisabled}
+>
+  +
+</button>
+{errorMessage && <p role="alert">{errorMessage}</p>}
+```
+
+The layout names what it needs: `isIncrementButtonDisabled` and
+`errorMessage`. That is the `presenter` contract, and nothing in it says where
+the values come from. The `controller` contract does not change - the button
+still calls `onIncrementButtonClick`.
+
+Behind the two values is new state with its own rules: an operation is `idle`,
+`loading` or failed, and an `idle` operation cannot carry an error message.
+State with rules is an entity - here an *application business entity*, because
+it exists only because this application talks to a remote resource.
 
 ```tsx
 //#region entities unit
@@ -267,14 +288,25 @@ const [status, setStatus] = useState<CounterStatus>({ kind: "idle" });
 //#endregion entities unit
 ```
 
-The `use case` transitions it:
+The `presenter` derives the two values from it:
+
+```tsx
+//#region presenter unit
+const isIncrementButtonDisabled = status.kind === "loading";
+const errorMessage = status.kind === "error" ? status.message : undefined;
+//#endregion presenter unit
+```
+
+And the `use case` transitions it:
 
 ```tsx
 const onIncrementButtonClick = async (): Promise<void> => {
   //#region use case unit
   setStatus({ kind: "loading" });
   try {
-    setCount(await gateway.increment());
+    await gateway.increment();
+    const count = await gateway.getCount();
+    setCount(count);
     setStatus({ kind: "idle" });
   } catch {
     setStatus({ kind: "error", message: "Could not increment" });
@@ -283,17 +315,8 @@ const onIncrementButtonClick = async (): Promise<void> => {
 };
 ```
 
-The `presenter` reads it:
-
-```tsx
-//#region presenter unit
-const isBusy = status.kind === "loading";
-const errorMessage = status.kind === "error" ? status.message : undefined;
-//#endregion presenter unit
-```
-
-And the JSX only consumes `isBusy` and `errorMessage`. The write path sets the
-status, the read path shows it; neither knows about the other.
+The read path shows the status, the write path sets it; neither knows about
+the other.
 
 ### Knowing when to stop
 
