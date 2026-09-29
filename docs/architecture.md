@@ -54,6 +54,7 @@ C -- depends --> UC
 P -- depends --> E
 UC -- depends --> E
 UC -- depends --> GI
+GI -- depends --> E
 G -- depends --> ER
 
 classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
@@ -285,6 +286,7 @@ subgraph CRA["The Clean Reactive Architecture UML Diagram"]
   P -- depends --> E
   UC -- depends --> E
   UC -- depends --> GI
+  GI -- depends --> E
   G -- depends --> ER
 
 end
@@ -388,6 +390,7 @@ C -- depends --> UC
 P -- depends --> E
 UC -- depends --> E
 UC -- depends --> GI
+GI -- depends --> E
 G -- depends --> ER
 
 %% flow
@@ -416,7 +419,7 @@ A composition root is a location in an application where units are assembled
 and wired into an object graph according to the dependency relationships defined
 by the architecture.
 
-![clean-reactive-architecture-composition-root](images/clean-reactive-architecture-composition-root.png)
+![clean-reactive-architecture-composition-root](images/clean-reactive-architecture-composition-root.svg)
 
 <details>
   <summary>mermaid</summary>
@@ -469,6 +472,7 @@ C -- depends --> UC
 P -- depends --> E
 UC -- depends --> E
 UC -- depends --> GI
+GI -- depends --> E
 G -- depends --> ER
 
 classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
@@ -707,6 +711,7 @@ EF -- depends --> E
 EF -- depends --> GI
 TR -- depends --> SE
 TR -- depends --> E
+GI -- depends --> E
 G -- depends --> ER
 
 classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
@@ -804,6 +809,7 @@ C -- depends --> UC
 P -- depends --> E
 UC -- depends --> E
 UC -- depends --> GI
+GI -- depends --> E
 G -- depends --> ER
 
 classDef boundary fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
@@ -990,6 +996,7 @@ C -- depends --> UC
 P -- depends --> E
 UC -- depends --> E
 UC -- depends --> GI
+GI -- depends --> E
 G -- depends --> ER
 
 classDef repository fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
@@ -1037,6 +1044,7 @@ C -- depends --> UC
 P -- depends --> E
 UC -- depends --> E
 UC -- depends --> GI
+GI -- depends --> E
 G -- depends --> ER
 
 classDef repository fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
@@ -1095,6 +1103,7 @@ C -- depends --> UC
 P -- depends --> E
 UC -- depends --> E
 UC -- depends --> GI
+GI -- depends --> E
 G -- depends --> ER
 
 classDef driver fill:none,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5;
@@ -1155,6 +1164,7 @@ C -- depends --> UC
 P -- depends --> E
 UC -- depends --> E
 UC -- depends --> GI
+GI -- depends --> E
 G -- depends --> ER
 G -- depends --> WST
 WSL -- depends --> CI

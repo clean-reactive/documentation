@@ -1,9 +1,10 @@
 # Introduction
 
 This guide is the gentle way in. It explains what Clean Reactive Architecture
-is for, names its units in plain words, and walks through the smallest sample
-- a counter - unit by unit. It then grows the counter a little, to show how a
-feature evolves without being rewritten.
+is for, names its units in plain words, and walks through the smallest sample,
+a counter, unit by unit. The guide then changes the counter twice - extracting
+a gateway from repeated code and adding an entity for a new requirement - to
+show how a feature evolves without being rewritten.
 
 You only need to have built a component in a reactive framework before - React,
 Angular, Vue, Flutter, SwiftUI or similar. The examples use React, but nothing
@@ -14,27 +15,29 @@ in the architecture depends on it.
 A component in a reactive application usually does many things at once. It
 fetches data, holds state, applies rules, formats values for display, handles
 clicks and renders the result. While the feature is small, this is fine. As it
-grows, the concerns tangle: a formatting change breaks a rule, a rule is
-duplicated in three event handlers, and switching the backend means touching
-the rendering code.
+grows, the responsibilities tangle: a formatting change breaks a rule, a rule
+is duplicated in three event handlers, and switching the backend means touching
+the rendering code. Underneath is a missing map: nothing says where one
+responsibility ends and the next begins, so there is no obvious way to group
+lines of code into meaningful, reusable parts.
 
-Clean Reactive Architecture gives each of these concerns a name - a *unit* -
-and defines which unit may depend on which. That is all it defines. It does not
-tell you to split files, create classes, or add a library.
+Clean Reactive Architecture gives each of these responsibilities a name - a
+*unit* - and defines which unit may depend on which. That is all it defines. It
+does not tell you to split files, create classes, or add a library.
 
 ## Units in plain words
 
-Each unit answers one question.
+Each unit owns one responsibility.
 
-| Unit                  | The question it answers                                    | In the counter                         |
-| --------------------- | ---------------------------------------------------------- | -------------------------------------- |
-| `user interface`      | What does the user see, and what can the user do?          | the JSX with the value and two buttons |
-| `presenter`           | What exactly should be shown?                              | `countStatus` - "Positive", "Zero"     |
-| `controller`          | What did the user ask for?                                 | `onIncrementButtonClick`               |
-| `use case interactor` | How is the request fulfilled?                              | call the resource, then update `count` |
-| `entities`            | What is true right now, and which rules keep it valid?     | `count`                                |
-| `gateway`             | How does the application talk to the outside?              | the in-memory and `fetch` branches     |
-| `external resource`   | What is outside the application?                           | the in-memory counter, `/api/counter`  |
+| Unit                  | Responsible for                                          | In the counter                         |
+| --------------------- | -------------------------------------------------------- | -------------------------------------- |
+| `user interface`      | showing things to the user and letting them act          | the JSX with the value and two buttons |
+| `presenter`           | deciding what to show                                    | `countStatus` - "Positive", "Zero"     |
+| `controller`          | catching what the user did                               | `onIncrementButtonClick`               |
+| `use case interactor` | doing what the user asked for                            | call the resource, then update `count` |
+| `entities`            | keeping what is true, and keeping it right               | `count`                                |
+| `gateway`             | translating to and from the outside world                | the in-memory and `fetch` branches     |
+| `external resource`   | representing outside the app - servers, storage, devices | the in-memory counter, `/api/counter`  |
 
 Two more words appear on the diagram:
 
@@ -46,6 +49,14 @@ Two more words appear on the diagram:
   objects, DTOs - never as behavior.
 
 ## The diagram
+
+![clean-reactive-architecture](images/clean-reactive-architecture.svg)
+
+The *double lines* represent boundaries, which data crosses as primitive data
+types or data structures.
+
+<details>
+  <summary>mermaid</summary>
 
 ```mermaid
 graph TD
@@ -71,13 +82,19 @@ C -- depends --> UC
 P -- depends --> E
 UC -- depends --> E
 UC -- depends --> GI
+GI -- depends --> E
 G -- depends --> ER
 ```
 
-Read the solid arrows as "knows about". Notice what is missing: `entities`
-know about nothing, the `use case` does not know which `gateway` it talks to,
-and the `user interface` does not know how its data was prepared. That is what
-lets each part change on its own.
+</details>
+
+The diagram has two kinds of arrows, shown in its legend. An arrow with an open
+head means *depends* - read it as "knows about". An arrow with a hollow
+triangle means *implements* - the unit fulfils the contract it points to.
+
+Notice what is missing: `entities` know about nothing, the `use case` does not
+know which `gateway` it talks to, and the `user interface` does not know how its
+data was prepared. That is what lets each part change on its own.
 
 ## Two paths
 
