@@ -55,6 +55,10 @@ Two more words the architecture introduces:
 
 ## The diagram
 
+The diagram brings the units, interfaces and boundaries together in one view.
+It shows what each unit may depend on and which contracts connect them. Use it
+as a map while following the counter example below.
+
 ![clean-reactive-architecture](images/clean-reactive-architecture.svg)
 
 <details>
