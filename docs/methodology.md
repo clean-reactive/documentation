@@ -120,10 +120,11 @@ another on the `external resource` - neither needs anything from the other. A
 third can focus on the core using the `presenter<I>` and `controller<I>`, and
 a fourth bringing it all together by implementing the `gateway`.
 
-It is worth mentioning that not every feature includes every step. A read-only
-feature has no `controller` or `use case`, a single-operation feature may
-invoke `gateway` directly. The flow lists the full sequence, every feature
-uses the steps it needs.
+Not every component includes every step. A component may only read data from
+entities and display it through a `presenter` and `user interface`. Other parts
+of the application populate and update those entities. Such a component needs
+no `controller`, `use case`, `gateway` or `external resource` of its own. The
+flow lists the full sequence; each component uses only the steps it needs.
 
 See also:
 

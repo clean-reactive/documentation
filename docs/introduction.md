@@ -124,9 +124,9 @@ Everything the application does travels along one of two paths.
   `user interface`.
 
 The paths meet only at the `entities`: one writes, the other reads. Between
-the `user interface` and the `entities`, no unit sits on both paths. In
-practice this means a decision is never made from data that was formatted for
-display, and a display change can never alter a decision.
+the `user interface` and the `entities`, no unit sits on both paths. This keeps
+display formatting separate from business decisions, so changing how a value
+is shown should not require changing the rules that update it.
 
 The `user interface` closes the loop as an observer of the `entities`. When an
 entity changes, everything that observes it updates - there is no code that
@@ -138,7 +138,8 @@ Open [`App.tsx`](https://github.com/clean-reactive/sample-react-one-file/blob/ma
 from the one-file sample. Every unit lives in one component, and each is
 marked with a `#region` comment.
 
-**Entities** - the state and nothing else:
+**Entities** - hold state and its validity rules. The counter starts with a
+single number and needs no additional validity rules:
 
 ```tsx
 //#region entities unit
@@ -236,9 +237,9 @@ type CounterGateway = {
 };
 ```
 
-Both resources follow CQRS: a command (`increment`, `decrement`) changes the
-count and returns nothing, and a query (`getCount`) reads it. The contract does
-not copy that shape - it follows its consumer. Bridging the two is the
+The resources separate commands from queries: a command (`increment`,
+`decrement`) changes the count, and a query (`getCount`) reads it. The contract
+does not copy that shape - it follows its consumer. Bridging the two is the
 `gateway`'s job: each command is followed by the query.
 
 ```tsx
@@ -409,9 +410,14 @@ outside and move in. The full order is:
 8. `external resource`
 9. `gateway`
 
-Use only the steps the feature needs. A read-only feature has no `controller`
-or `use case`. A single-operation feature may call the `gateway` directly. If
-an entity already has the shape the screen needs, there is no `presenter`.
+Use only the steps the component needs. A component may only read data from
+entities and display it through a `presenter` and `user interface`. Other parts
+of the application populate and update those entities. Such a component needs
+no `controller`, `use case`, `gateway` or `external resource` of its own.
+
+When an entity already has the shape the screen needs, the `presenter` can
+simply pass the value through, as `countValue` does.
+
 Start everything inline in one component, and extract as described above.
 
 The details are in the [Development Methodology](methodology.md#outside-in-development).
@@ -420,19 +426,18 @@ The details are in the [Development Methodology](methodology.md#outside-in-devel
 
 - **"Every unit needs its own file."** No. The diagram shows responsibilities.
   The one-file sample has all of them in one function.
+- **"Every feature needs every unit."** No. Use the units the feature needs.
 - **"I must design the interfaces first."** No. An interface is extracted from
   its consumer when the flow reaches it, so it contains exactly what is used.
 - **"I must model the entities (the domain) first."** Not required. Starting
   from the `user interface` works well: building it clarifies the feature,
   leaves `presenter<I>` and `controller<I>` as concrete input for modeling the
   entities, and finishes the `user interface` along the way.
-- **"Every feature needs every unit."** No. Use the units the feature needs.
-- **"Entities must be free of the framework."** No. Frameworks provide useful
-  reactive primitives - `useState`, signals, notifiers, stores - and avoiding
-  them only adds wrapper code. What matters is that entities are visible: their
-  data and rules sit in one explicit place, not spread thinly across components,
-  event handlers and helpers. Clean boundaries, not mechanical independence from the
-  framework, are what make them portable.
+- **"Entities must avoid framework code."** No. Entities can use libraries and
+  framework utilities, including useful tools for reactive state. Keep their
+  data and rules explicit, with clean boundaries separating them from other
+  responsibilities. When moving an entity, these boundaries keep the code that
+  needs adaptation easy to identify.
 - **"The user interface is the center."** No. The `user interface` is one
   *driver* among several. A test harness, a WebSocket listener or a deep link
   drives the same core - through a `controller`, a `presenter`, or both.
