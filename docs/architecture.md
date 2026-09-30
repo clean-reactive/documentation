@@ -8,6 +8,10 @@ The Clean Architecture concept is outlined with the following circle diagram:
 
 ![clean-architecture](images/ca-circle-diagram.jpg)
 
+*Source: Robert C. Martin, [The Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html).
+See [Third-party notices](../THIRD_PARTY_NOTICES.md#clean-architecture-circle-diagram)
+for licensing scope.*
+
 The implementation of the concept for reactive applications is outlined with
 the following UML diagram:
 
@@ -213,6 +217,9 @@ class B1,B2,B3,B4 boundary;
 *Clean Architecture. A craftsman’s guide to software structure and design.
 Robert C. Martin. Copyright © 2018 Pearson Education, Inc.*
 
+See [Third-party notices](../THIRD_PARTY_NOTICES.md#web-based-java-system-diagram)
+for licensing scope, including the Mermaid adaptation.
+
 However, this implementation does not directly apply to reactive applications.
 Attempts to use it introduce code solely for adapting it. Nevertheless, the
 Clean Architecture concept is universal and an implementation tailored for a
@@ -220,6 +227,9 @@ reactive application, for example with external API integration, is
 constructed as follows:
 
 ![clean-architecture-to-clean-reactive-architecture](images/ca-to-clean-reactive-architecture.png)
+
+*The upper diagram is third-party material; see
+[Third-party notices](../THIRD_PARTY_NOTICES.md#clean-architecture-circle-diagram).*
 
 <details>
   <summary>mermaid</summary>

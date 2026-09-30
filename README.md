@@ -28,3 +28,12 @@ decomposition.
 remain inlined in the component that uses them, because [continuous
 refactoring](./docs/methodology.md#continuous-refactoring) extracts a unit only
 when it earns it.
+
+## License
+
+Original documentation, code examples and diagrams in this repository are
+licensed under the [MIT License](./LICENSE), except where otherwise noted.
+Third-party material retains its original rights and is not relicensed under
+MIT; see [Third-party notices](./THIRD_PARTY_NOTICES.md).
+
+Each sample repository states its own license.
