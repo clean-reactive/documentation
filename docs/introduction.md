@@ -125,7 +125,7 @@ practice this means a decision is never made from data that was formatted for
 display, and a display change can never alter a decision.
 
 The `user interface` closes the loop as an observer of the `entities`. When an
-entity changes, everything that observes it re-renders - there is no code that
+entity changes, everything that observes it updates - there is no code that
 "pushes" the new value to the screen.
 
 ## Reading the counter
@@ -421,7 +421,7 @@ The details are in the [Development Methodology](methodology.md#outside-in-devel
   reactive primitives - `useState`, signals, notifiers, stores - and avoiding
   them only adds wrapper code. What matters is that entities are visible: their
   data and rules sit in one explicit place, not spread thinly across components,
-  hooks and handlers. Clean boundaries, not mechanical independence from the
+  event handlers and helpers. Clean boundaries, not mechanical independence from the
   framework, are what make them portable.
 - **"The user interface is the center."** No. The `user interface` is one
   *driver* among several. A test harness, a WebSocket listener or a deep link
