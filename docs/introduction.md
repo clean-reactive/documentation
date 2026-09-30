@@ -16,15 +16,19 @@ in the architecture depends on it.
 A component in a reactive application usually does many things at once. It
 fetches data, holds state, applies rules, formats values for display, handles
 clicks and renders the result. While the feature is small, this is fine. As it
-grows, the responsibilities tangle: a formatting change breaks a rule, a rule
-is duplicated in three event handlers, and switching the backend means touching
-the rendering code. Nothing clearly says where one responsibility ends and the
-next begins, so there is no reliable way to decompose the component into clean,
-reusable parts.
+grows, the responsibilities start to interfere: a formatting change breaks a
+rule, a rule is duplicated in three event handlers, a renamed field in the API
+response breaks the rendering code, and when a value on the screen is wrong,
+it is difficult to trace why.
 
-Clean Reactive Architecture gives each of these responsibilities a name - a
-*unit* - and defines which unit may depend on which. It does not tell you to
-split files, create classes, or add a library.
+Splitting the component should help, but nothing says where one responsibility
+ends and the next begins. Every change starts with the same question - which of
+these lines belong together? - and every developer answers it differently.
+
+Clean Reactive Architecture answers that question once. It gives each of these
+responsibilities a name - a *unit* - and defines which unit may depend on which,
+so the boundaries are the same for every developer and every framework. It does
+not tell you to split files, create classes, or add a library.
 
 ## Units in plain words
 
@@ -391,7 +395,9 @@ Q&A](architecture.md#qa).
 
 ## Building your own feature
 
-Start from the outside and move in. The full order is:
+The architecture does not prescribe a development process, and a team can choose
+the one that works best for it. The suggested approach is to start from the
+outside and move in. The full order is:
 
 1. `user interface` (layout)
 2. `presenter<I>` and `controller<I>` - extracted from what the layout uses
@@ -416,6 +422,10 @@ The details are in the [Development Methodology](methodology.md#outside-in-devel
   The one-file sample has all of them in one function.
 - **"I must design the interfaces first."** No. An interface is extracted from
   its consumer when the flow reaches it, so it contains exactly what is used.
+- **"I must model the entities (the domain) first."** Not required. Starting
+  from the `user interface` works well: building it clarifies the feature,
+  leaves `presenter<I>` and `controller<I>` as concrete input for modeling the
+  entities, and finishes the `user interface` along the way.
 - **"Every feature needs every unit."** No. Use the units the feature needs.
 - **"Entities must be free of the framework."** No. Frameworks provide useful
   reactive primitives - `useState`, signals, notifiers, stores - and avoiding
