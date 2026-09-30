@@ -44,9 +44,9 @@ Each unit owns one responsibility.
 | `gateway`             | translating to and from the outside world                        | the in-memory and `fetch` branches     |
 | `external resource`   | representing what is outside the app - servers, storage, devices | the in-memory counter, `/api/counter`  |
 
-Two more words appear on the diagram:
+Two more words the architecture introduces:
 
-- `<I>` marks an **interface** - a contract. `presenter<I>`, `controller<I>` and
+- An **interface** marked with `<I>` - a contract. `presenter<I>`, `controller<I>` and
   `gateway<I>` are declared by the unit that *uses* them, not by the unit that
   implements them. An interface does not have to be a language `interface`; a
   type of a value is enough.
@@ -212,7 +212,7 @@ one valid state to another.
 The JSX never reads `count` directly and never calls a resource.
 
 **Composition root** - `App` itself. It is where all the units above are
-created and wired together. It is a responsibility, not an extra unit.
+created and wired together. It is a framework responsibility, not an extra unit.
 
 > NOTE: Every unit of the diagram is present, yet there is only one function
 > and one file. Units are responsibilities, not files. This is the shape a
