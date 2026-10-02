@@ -18,8 +18,8 @@ fetches data, holds state, applies rules, formats values for display, handles
 clicks and renders the result. While the feature is small, this is fine. As it
 grows, the responsibilities start to interfere: a formatting change breaks a
 rule, a rule is duplicated in three event handlers, a renamed field in the API
-response breaks the rendering code, and when a value on the screen is wrong,
-it is difficult to trace why.
+response breaks the rendering code, a wrong value on screen is difficult to
+trace, and it is unclear where a side effect belongs.
 
 Splitting the component should help, but nothing says where one responsibility
 ends and the next begins. Every change starts with the same question - which of
@@ -131,6 +131,11 @@ The paths meet only at the `entities`: one writes, the other reads. Between
 the `user interface` and the `entities`, no unit sits on both paths. This keeps
 display formatting separate from business decisions, so changing how a value
 is shown should not require changing the rules that update it.
+
+The read path is free of side effects: preparing data for display does not
+trigger backend requests or change state. A backend request belongs on the
+write path, through a `use case` and `gateway`, even when it only fetches data
+to populate the `entities`.
 
 The `user interface` closes the loop as an observer of the `entities`. When an
 entity changes, everything that observes it updates - there is no code that
