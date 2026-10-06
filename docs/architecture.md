@@ -268,7 +268,7 @@ subgraph CA["The Clean Architecture Circle Diagram"]
 
 end
 
-subgraph CRA["The Clean Reactive Architecture UML Diagram"]
+subgraph CleanReactiveArchitecture["The Clean Reactive Architecture UML Diagram"]
 
   G["Gateway"]
   ER["External Resource"]
@@ -301,7 +301,7 @@ subgraph CRA["The Clean Reactive Architecture UML Diagram"]
 
 end
 
-CA -. implementation .-> CRA
+CA -. implementation .-> CleanReactiveArchitecture
 ```
 
 </details>
@@ -900,6 +900,126 @@ In fact, the core (library) implementation can follow any other architectural
 concept, for example, hexagonal, or none at all. It can even be developed in
 parallel with a reactive client - the client's gateway will connect the two
 parts later.
+
+</details>
+
+<details>
+  <summary><b>How does it map to 3-layer architecture?</b></summary>
+
+Mobile applications are commonly described through three layers: *UI →
+Domain → Data*. This model leaves several architectural questions open,
+with different approaches attempting to resolve them.
+
+For example, what structure belongs inside the UI (presentation) layer, and does
+it require an additional MV* architectural pattern? Why is the domain layer
+optional in some approaches if the application still has business rules? Why do
+dependencies point toward data access, when separating business rules from
+external details was a central motivation for moving toward Clean, Hexagonal and
+similar architectures?
+
+Clean Reactive Architecture makes the responsibilities, contracts and
+boundaries behind these questions explicit. The following diagram shows
+them within the familiar three-layer grouping.
+
+![clean-reactive-architecture-to-3-layer-architecture](images/clean-reactive-architecture-to-3-layer-architecture.svg)
+
+<details>
+  <summary>mermaid</summary>
+
+```mermaid
+graph LR
+
+subgraph UIL["UI Layer"]
+  subgraph BUI["Boundary"]
+    UI["User Interface"]
+  end
+  PI["Presenter < I >"]
+  CI["Controller < I >"]
+  P["Presenter"]
+  C["Controller"]
+end
+
+subgraph DL["Domain Layer"]
+  UC["Use Case Interactor"]
+end
+
+subgraph DATA["Data Layer"]
+  subgraph BE["Boundary"]
+    E["Entities"]
+  end
+  GI["Gateway < I >"]
+  subgraph BG["Boundary"]
+    G["Gateway"]
+    ER["External Resource"]
+  end
+end
+
+%% implementation relation
+P -. implements .-> PI
+C -. implements .-> CI
+G -. implements .-> GI
+
+%% dependency relation
+UI -- depends --> PI
+UI -- depends --> CI
+C -- depends --> UC
+P -- depends --> E
+UC -- depends --> E
+UC -- depends --> GI
+GI -- depends --> E
+G -- depends --> ER
+
+%% familiar layer dependencies
+UIL -- depends --> DL
+DL -- depends --> DATA
+
+classDef layer fill:none,stroke:#000,stroke-width:1px,stroke-dasharray: 3 3;
+classDef boundary fill:none,stroke:#666,stroke-width:2px;
+class UIL,DL,DATA layer;
+class BUI,BE,BG boundary;
+```
+
+</details>
+
+The dashed boxes show the three layers; the double lines show Clean Reactive
+Architecture's boundaries. The Mermaid interpretation represents those double
+lines as named boundary groups.
+
+Inside the *UI Layer*, Clean Reactive Architecture specifies the responsibilities
+and their relationships directly, removing the need to choose an additional MV*
+pattern.
+The `user interface` displays values and captures input; `controller` and
+`presenter` split input handling and display preparation into _separate_ write
+and read paths. Between the `user interface` and `entities`, no unit sits on
+both paths.
+
+The optional *Domain Layer* in the referenced mobile architecture guides
+provides a place to extract complex or reused logic. In Clean Reactive
+Architecture, every application flow toward a user's goal has a `use case`
+that orchestrates it, regardless of complexity, reuse or development methodology.
+
+In Clean Reactive Architecture, the `use case` defines the `gateway<I>` contract
+it requires, and the `gateway` implements that contract. The relationship is
+`use case → gateway<I> ← gateway`: the external integration depends on the
+application's contract, while the use case has no dependency on the concrete
+gateway or external resource.
+
+In the mapping above, the broad *Domain → Data* arrow groups together
+dependencies with different architectural meanings, hiding the inversion.
+Clean Reactive Architecture makes the inversion visible by distinguishing the
+application's data and contracts from the external implementation.
+
+Developers can identify who owns a contract, which implementation must conform
+to it, and which dependencies may cross a boundary. A three-layer implementation
+may already use dependency inversion; Clean Reactive Architecture makes it
+explicit in the architectural model.
+
+See also:
+
+- Flutter. [Guide to app architecture](https://docs.flutter.dev/app-architecture/guide).
+- Android. [Guide to app architecture](https://developer.android.com/topic/architecture).
+- Now in Android. [Architecture Learning Journey](https://github.com/android/nowinandroid/blob/main/docs/ArchitectureLearningJourney.md).
+- Now in Android. [Discussion #1273: differences from Clean Architecture](https://github.com/android/nowinandroid/discussions/1273).
 
 </details>
 
