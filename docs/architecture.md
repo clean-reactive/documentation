@@ -982,32 +982,26 @@ class BUI,BE,BG boundary;
 </details>
 
 The dashed boxes show the three layers; the double lines show Clean Reactive
-Architecture's boundaries. The Mermaid interpretation represents those double
-lines as named boundary groups.
+Architecture's boundaries.
 
-Inside the *UI Layer*, Clean Reactive Architecture specifies the responsibilities
-and their relationships directly, removing the need to choose an additional MV*
-pattern.
-The `user interface` displays values and captures input; `controller` and
-`presenter` split input handling and display preparation into _separate_ write
-and read paths. Between the `user interface` and `entities`, no unit sits on
-both paths.
+Inside the *UI Layer*, Clean Reactive Architecture specifies the
+responsibilities and their relationships directly, removing the need to choose
+an additional MV* pattern. The `user interface` displays values and captures
+input; `controller` and `presenter` split input handling and display preparation
+into _separate_ write and read paths. Between the `user interface` and
+`entities`, no unit sits on both paths.
 
-The optional *Domain Layer* in the referenced mobile architecture guides
-provides a place to extract complex or reused logic. In Clean Reactive
-Architecture, every application flow toward a user's goal has a `use case`
-that orchestrates it, regardless of complexity, reuse or development methodology.
+The optional *Domain Layer* in the referenced mobile architectures provides a
+place to extract complex or reused logic. In Clean Reactive Architecture, the
+`use case` is the mandatory unit for orchestrating application flow toward a
+user's goal.
 
 In Clean Reactive Architecture, the `use case` defines the `gateway<I>` contract
-it requires, and the `gateway` implements that contract. The relationship is
-`use case → gateway<I> ← gateway`: the external integration depends on the
-application's contract, while the use case has no dependency on the concrete
-gateway or external resource.
-
-In the mapping above, the broad *Domain → Data* arrow groups together
-dependencies with different architectural meanings, hiding the inversion.
-Clean Reactive Architecture makes the inversion visible by distinguishing the
-application's data and contracts from the external implementation.
+it requires, and the `gateway` implements that contract, making the inverted
+relationship `use case → gateway<I> ← gateway` explicit. The external
+integration depends on the contract, while the use case has no knowledge of
+the concrete gateway or external resource implementation. The broad
+*Domain → Data* arrow alone neither specifies nor reveals this inversion.
 
 Developers can identify who owns a contract, which implementation must conform
 to it, and which dependencies may cross a boundary. A three-layer implementation
