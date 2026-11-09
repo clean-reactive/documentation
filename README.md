@@ -21,8 +21,12 @@ decomposition.
   RTK Query, partially decomposed.
 - [Angular App](https://github.com/clean-reactive/sample-angular) -
   Angular and TanStack Query, partially decomposed.
+- [Vue App](https://github.com/clean-reactive/sample-vue) -
+  Vue and TanStack Query, partially decomposed.
 - [Next.js App](https://github.com/clean-reactive/sample-nextjs-react) -
   full-stack, covering both the client and the server.
+- [Flutter App](https://github.com/clean-reactive/sample-flutter) -
+  Flutter and Riverpod, partially decomposed.
 
 *Partially* decomposed is deliberate. Some units have their own files, others
 remain inlined in the component that uses them, because [continuous
